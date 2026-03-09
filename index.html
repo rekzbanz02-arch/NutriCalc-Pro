@@ -1,0 +1,2886 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NutriCalc Pro — Fitness & Nutrition Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;900&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+<style>
+/* ═══════════════════════════════════════════════════════════
+   DESIGN SYSTEM — WARM CLINICAL JOURNAL AESTHETIC
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  /* Light palette */
+  --bg:           #f5f0e8;
+  --bg2:          #ede7d9;
+  --bg3:          #e4dccc;
+  --surface:      #faf7f2;
+  --surface2:     #f0ebe0;
+  --border:       #d5cbb8;
+  --border2:      #c4b89e;
+
+  /* Accent colours */
+  --green:        #2d6a4f;
+  --green-mid:    #40916c;
+  --green-light:  #74c69d;
+  --green-pale:   #d8f3dc;
+  --terra:        #c1440e;
+  --terra-mid:    #e07a5f;
+  --terra-light:  #f2a285;
+  --terra-pale:   #fde8e0;
+  --gold:         #c9882c;
+  --gold-pale:    #fdf0d5;
+  --navy:         #1d3557;
+  --navy-mid:     #2e5075;
+  --blue-pale:    #d6e8f9;
+
+  /* Text */
+  --text:         #1c1a15;
+  --text2:        #3d3a30;
+  --muted:        #7a7260;
+  --muted2:       #a09880;
+
+  /* Misc */
+  --radius:       16px;
+  --radius-sm:    10px;
+  --radius-xs:    6px;
+  --shadow:       0 4px 24px rgba(45,40,28,.10);
+  --shadow-lg:    0 12px 48px rgba(45,40,28,.15);
+  --shadow-card:  0 2px 12px rgba(45,40,28,.08);
+  --font-head:    'Playfair Display', Georgia, serif;
+  --font-body:    'Nunito', system-ui, sans-serif;
+  --transition:   .2s cubic-bezier(.4,0,.2,1);
+  --transition-s: .35s cubic-bezier(.4,0,.2,1);
+}
+
+/* DARK MODE */
+[data-theme="dark"] {
+  --bg:           #12110e;
+  --bg2:          #1a1815;
+  --bg3:          #221f1a;
+  --surface:      #1e1c18;
+  --surface2:     #272420;
+  --border:       #38332a;
+  --border2:      #4a4438;
+  --green:        #52b788;
+  --green-mid:    #74c69d;
+  --green-light:  #95d5b2;
+  --green-pale:   #1a3028;
+  --terra:        #f4a261;
+  --terra-mid:    #f4a261;
+  --terra-light:  #ffb380;
+  --terra-pale:   #2e1e12;
+  --gold:         #e9c46a;
+  --gold-pale:    #2a2010;
+  --navy:         #90b8e0;
+  --navy-mid:     #a8ccf0;
+  --blue-pale:    #152033;
+  --text:         #f0ebe0;
+  --text2:        #c8c0ac;
+  --muted:        #8a8070;
+  --muted2:       #5a5448;
+  --shadow:       0 4px 24px rgba(0,0,0,.4);
+  --shadow-lg:    0 12px 48px rgba(0,0,0,.55);
+  --shadow-card:  0 2px 12px rgba(0,0,0,.35);
+}
+
+/* ═══ RESET & BASE ═══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 15px; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.65;
+  min-height: 100vh;
+  transition: background var(--transition-s), color var(--transition-s);
+  overflow-x: hidden;
+}
+
+/* Subtle paper texture overlay */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
+  opacity: .6;
+}
+
+/* Background decoration */
+.bg-orbs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.bg-orbs::before {
+  content: '';
+  position: absolute; top: -20%; right: -10%;
+  width: 60vw; height: 60vw; border-radius: 50%;
+  background: radial-gradient(circle, rgba(45,106,79,.07) 0%, transparent 70%);
+}
+.bg-orbs::after {
+  content: '';
+  position: absolute; bottom: -15%; left: -8%;
+  width: 50vw; height: 50vw; border-radius: 50%;
+  background: radial-gradient(circle, rgba(193,68,14,.05) 0%, transparent 70%);
+}
+
+/* ═══ LAYOUT ════════════════════════════════════════════════ */
+#app {
+  position: relative; z-index: 1;
+  max-width: 920px; margin: 0 auto;
+  padding: 0 16px 80px;
+}
+
+/* ═══ HEADER ════════════════════════════════════════════════ */
+header {
+  padding: 44px 0 36px;
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.header-brand {}
+.brand-tag {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--green-pale); border: 1px solid var(--green-light);
+  border-radius: 100px; padding: 4px 14px;
+  font-size: .75rem; font-weight: 700; color: var(--green);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+[data-theme="dark"] .brand-tag { background: var(--green-pale); border-color: var(--green-mid); }
+header h1 {
+  font-family: var(--font-head);
+  font-size: clamp(2rem, 5.5vw, 3.2rem);
+  font-weight: 900; line-height: 1.1;
+  color: var(--text);
+  letter-spacing: -.5px;
+}
+header h1 em { color: var(--green); font-style: normal; }
+header p { color: var(--muted); font-size: .92rem; margin-top: 8px; max-width: 420px; }
+.header-controls {
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+  padding-top: 8px;
+}
+.icon-btn {
+  width: 42px; height: 42px; border-radius: var(--radius-sm);
+  background: var(--surface); border: 1.5px solid var(--border);
+  color: var(--text2); font-size: 17px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition); flex-shrink: 0;
+}
+.icon-btn:hover { border-color: var(--green); color: var(--green); background: var(--green-pale); }
+
+/* ═══ UNIT TOGGLE BAR ═══════════════════════════════════════ */
+.unit-bar {
+  display: flex; align-items: center; gap: 20px;
+  margin-bottom: 24px; flex-wrap: wrap;
+}
+.unit-group {
+  display: flex; align-items: center; gap: 10px;
+}
+.unit-bar label {
+  font-size: .78rem; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .8px; white-space: nowrap;
+}
+.seg-ctrl {
+  display: flex;
+  background: var(--bg2);
+  border: 1.5px solid var(--border);
+  border-radius: 100px;
+  padding: 3px;
+  gap: 2px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.06);
+}
+.seg-ctrl button {
+  padding: 7px 20px; border-radius: 100px; border: none;
+  font-family: var(--font-body); font-size: .83rem; font-weight: 600;
+  cursor: pointer; transition: all var(--transition);
+  background: transparent; color: var(--muted);
+  white-space: nowrap;
+}
+.seg-ctrl button.active {
+  background: var(--green); color: #fff;
+  box-shadow: 0 2px 10px rgba(45,106,79,.38);
+}
+.unit-divider {
+  width: 1px; height: 28px;
+  background: var(--border); border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ═══ CARDS ═════════════════════════════════════════════════ */
+.card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 28px 24px;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 18px;
+}
+.card-title {
+  font-family: var(--font-head);
+  font-size: 1.15rem; font-weight: 700;
+  color: var(--text);
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+  padding-bottom: 14px;
+  border-bottom: 1.5px solid var(--border);
+}
+.card-title .ct-icon {
+  width: 34px; height: 34px; border-radius: var(--radius-xs);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+}
+.ct-icon.green { background: var(--green-pale); }
+.ct-icon.terra { background: var(--terra-pale); }
+.ct-icon.gold  { background: var(--gold-pale); }
+.ct-icon.navy  { background: var(--blue-pale); }
+
+/* ═══ FORM GRID ═════════════════════════════════════════════ */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 16px;
+}
+.fg { display: flex; flex-direction: column; gap: 7px; }
+.fg label {
+  font-size: .78rem; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .65px;
+}
+.fg input, .fg select {
+  background: var(--bg2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font-body); font-size: .98rem;
+  padding: 11px 14px;
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+  outline: none; width: 100%;
+  -webkit-appearance: none;
+}
+.fg input::placeholder { color: var(--muted2); }
+.fg input:focus, .fg select:focus {
+  border-color: var(--green-mid);
+  box-shadow: 0 0 0 3px rgba(64,145,108,.15);
+  background: var(--surface);
+}
+.fg select option { background: var(--bg2); color: var(--text); }
+.input-wrap { position: relative; }
+.input-wrap input { padding-right: 46px; }
+.input-suffix {
+  position: absolute; right: 13px; top: 50%;
+  transform: translateY(-50%);
+  font-size: .82rem; font-weight: 700; color: var(--muted);
+  pointer-events: none; user-select: none;
+}
+
+/* Height dual input (ft + in) */
+.height-dual { display: flex; gap: 8px; }
+.height-dual .input-wrap { flex: 1; }
+
+/* Sex toggle buttons */
+.sex-row { display: flex; gap: 8px; }
+.sex-btn {
+  flex: 1; padding: 11px 8px; border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--bg2); color: var(--muted);
+  font-family: var(--font-body); font-size: .95rem; font-weight: 600;
+  cursor: pointer; transition: all var(--transition);
+}
+.sex-btn.active-m { border-color: var(--navy); color: var(--navy); background: var(--blue-pale); }
+.sex-btn.active-f { border-color: var(--terra); color: var(--terra); background: var(--terra-pale); }
+
+.fg.span2 { grid-column: span 2; }
+.fg.span-full { grid-column: 1 / -1; }
+
+/* ═══ BUTTON ROW ════════════════════════════════════════════ */
+.btn-row { display: flex; gap: 12px; margin-top: 22px; flex-wrap: wrap; }
+.btn {
+  padding: 14px 28px; border-radius: var(--radius-sm); border: none;
+  font-family: var(--font-head); font-weight: 700; font-size: 1rem;
+  cursor: pointer; transition: all var(--transition-s);
+  display: inline-flex; align-items: center; gap: 9px;
+  letter-spacing: .2px;
+}
+.btn-calc {
+  background: var(--green); color: #fff; flex: 1;
+  box-shadow: 0 4px 18px rgba(45,106,79,.35);
+  position: relative; overflow: hidden;
+}
+.btn-calc::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.12), transparent);
+}
+.btn-calc:hover { background: var(--green-mid); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(45,106,79,.45); }
+.btn-calc:active { transform: translateY(0); }
+.btn-reset { background: var(--surface2); color: var(--muted); border: 1.5px solid var(--border); }
+.btn-reset:hover { border-color: var(--terra); color: var(--terra); }
+.btn-sm { padding: 9px 18px; font-size: .88rem; font-family: var(--font-body); font-weight: 600; }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text2); }
+.btn-outline:hover { border-color: var(--green); color: var(--green); }
+.btn-terra { background: var(--terra); color: #fff; box-shadow: 0 4px 18px rgba(193,68,14,.3); }
+.btn-terra:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(193,68,14,.4); }
+
+/* ═══ LIVE PREVIEW BAR ══════════════════════════════════════ */
+#preview-bar {
+  background: var(--green-pale); border: 1.5px solid var(--green-light);
+  border-radius: var(--radius-sm); padding: 12px 18px;
+  display: none; align-items: center; gap: 16px; flex-wrap: wrap;
+  margin-top: 16px; font-size: .88rem; color: var(--green);
+  font-weight: 600;
+}
+#preview-bar.show { display: flex; }
+.pb-item { display: flex; align-items: center; gap: 6px; }
+.pb-label { color: var(--muted); font-weight: 400; }
+
+/* ═══ RESULTS SECTION ═══════════════════════════════════════ */
+#results-wrap {
+  opacity: 0; transform: translateY(24px);
+  pointer-events: none; transition: opacity .4s, transform .4s;
+  height: 0; overflow: hidden;
+}
+#results-wrap.revealed {
+  opacity: 1; transform: translateY(0);
+  pointer-events: all; height: auto; overflow: visible;
+}
+
+/* Section divider heading */
+.section-label {
+  font-family: var(--font-head); font-size: 1.4rem; font-weight: 700;
+  color: var(--text); margin: 28px 0 14px;
+  display: flex; align-items: center; gap: 12px;
+}
+.section-label::after {
+  content: ''; flex: 1; height: 1.5px;
+  background: linear-gradient(90deg, var(--border), transparent);
+}
+
+/* ── CALORIE GRID ─────────────────────────────────────────── */
+.calorie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px; margin-bottom: 18px;
+}
+.cal-tile {
+  border-radius: var(--radius-sm);
+  padding: 20px 18px; border: 1.5px solid transparent;
+  transition: transform var(--transition), box-shadow var(--transition);
+  cursor: default;
+}
+.cal-tile:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.cal-tile.maint { background: var(--green-pale); border-color: var(--green-light); }
+.cal-tile.loss  { background: var(--terra-pale); border-color: var(--terra-light); }
+.cal-tile.gain  { background: var(--blue-pale);  border-color: var(--navy-mid); }
+.cal-tile.bmr   { background: var(--gold-pale);  border-color: var(--gold); }
+.cal-tile .tl { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 6px; }
+.cal-tile.maint .tl { color: var(--green); }
+.cal-tile.loss  .tl { color: var(--terra); }
+.cal-tile.gain  .tl { color: var(--navy); }
+.cal-tile.bmr   .tl { color: var(--gold); }
+.cal-tile .tv {
+  font-family: var(--font-head); font-size: 2.4rem;
+  font-weight: 900; line-height: 1; margin-bottom: 3px;
+  color: var(--text);
+}
+.cal-tile .ts { font-size: .8rem; color: var(--muted); }
+
+/* ── METRICS GRID ─────────────────────────────────────────── */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px; margin-bottom: 18px;
+}
+.metric-tile {
+  background: var(--surface2); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); padding: 18px 16px;
+  transition: transform var(--transition);
+}
+.metric-tile:hover { transform: translateY(-2px); }
+.metric-tile .mt-icon { font-size: 1.5rem; margin-bottom: 6px; }
+.metric-tile .mt-label { font-size: .74rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 4px; }
+.metric-tile .mt-val {
+  font-family: var(--font-head); font-size: 1.75rem; font-weight: 700;
+  color: var(--text); line-height: 1.1;
+}
+.metric-tile .mt-sub { font-size: .8rem; color: var(--muted); margin-top: 3px; }
+.bmi-badge {
+  display: inline-block; padding: 3px 12px; border-radius: 100px;
+  font-size: .78rem; font-weight: 700; margin-top: 5px;
+}
+.bmi-badge.uw  { background: var(--blue-pale);  color: var(--navy); }
+.bmi-badge.nw  { background: var(--green-pale); color: var(--green); }
+.bmi-badge.ow  { background: var(--gold-pale);  color: var(--gold); }
+.bmi-badge.ob  { background: var(--terra-pale); color: var(--terra); }
+
+/* BMI visual bar */
+.bmi-bar-wrap { margin-top: 10px; }
+.bmi-track {
+  height: 10px; border-radius: 100px; position: relative; overflow: visible;
+  background: linear-gradient(90deg,
+    #74b3e0 0% 18.5%,
+    #52b788 18.5% 25%,
+    #e9c46a 25% 30%,
+    #e07a5f 30% 100%);
+  margin-bottom: 4px;
+}
+.bmi-pin {
+  position: absolute; top: 50%; transform: translate(-50%, -50%);
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--surface); border: 3px solid var(--green);
+  box-shadow: 0 0 0 2px rgba(64,145,108,.3);
+  transition: left .7s cubic-bezier(.4,0,.2,1);
+}
+.bmi-ticks { display: flex; justify-content: space-between; font-size: .68rem; color: var(--muted2); }
+
+/* ── MACRO SECTION ────────────────────────────────────────── */
+.macro-row {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 14px; margin-bottom: 18px;
+}
+.macro-tile {
+  border-radius: var(--radius-sm); padding: 20px 16px; text-align: center;
+  border: 1.5px solid transparent;
+  transition: transform var(--transition);
+}
+.macro-tile:hover { transform: translateY(-3px); }
+.macro-tile.prot { background: var(--green-pale); border-color: var(--green-light); }
+.macro-tile.fat  { background: var(--gold-pale);  border-color: var(--gold); }
+.macro-tile.carb { background: var(--terra-pale); border-color: var(--terra-light); }
+.macro-tile .mac-icon { font-size: 1.8rem; margin-bottom: 4px; }
+.macro-tile .mac-label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; margin-bottom: 6px; }
+.macro-tile.prot .mac-label { color: var(--green); }
+.macro-tile.fat  .mac-label { color: var(--gold); }
+.macro-tile.carb .mac-label { color: var(--terra); }
+.macro-tile .mac-val { font-family: var(--font-head); font-size: 2rem; font-weight: 900; color: var(--text); }
+.macro-tile .mac-kcal { font-size: .82rem; color: var(--muted); margin-top: 3px; }
+.macro-tile .mac-pct {
+  display: inline-block; margin-top: 8px;
+  padding: 2px 10px; border-radius: 100px;
+  font-size: .78rem; font-weight: 700; background: rgba(255,255,255,.5);
+  color: var(--muted);
+}
+[data-theme="dark"] .macro-tile .mac-pct { background: rgba(0,0,0,.2); }
+
+/* Macro bar visual */
+.macro-bar-wrap { margin-bottom: 20px; }
+.macro-bar-track {
+  height: 12px; border-radius: 100px; overflow: hidden;
+  background: var(--bg3); display: flex; gap: 2px;
+}
+.macro-seg { height: 100%; border-radius: 100px; transition: width .8s cubic-bezier(.4,0,.2,1); }
+.macro-seg.p { background: var(--green-mid); }
+.macro-seg.f { background: var(--gold); }
+.macro-seg.c { background: var(--terra-mid); }
+.macro-bar-legend {
+  display: flex; gap: 16px; margin-top: 8px;
+  font-size: .8rem; flex-wrap: wrap;
+}
+.mbl-item { display: flex; align-items: center; gap: 6px; color: var(--muted); }
+.mbl-dot { width: 9px; height: 9px; border-radius: 50%; }
+
+/* ═══ STEP-BY-STEP ACCORDIONS ═══════════════════════════════ */
+.accordion {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden; margin-bottom: 14px;
+}
+.acc-header {
+  width: 100%; text-align: left;
+  background: var(--surface); color: var(--text2);
+  border: none; padding: 16px 22px;
+  font-family: var(--font-body); font-size: .92rem; font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: background var(--transition);
+  gap: 10px;
+}
+.acc-header:hover { background: var(--surface2); }
+.acc-header .ah-left { display: flex; align-items: center; gap: 10px; }
+.acc-header .ah-pill {
+  font-size: .72rem; font-weight: 700; padding: 2px 10px;
+  border-radius: 100px; background: var(--green-pale); color: var(--green);
+  white-space: nowrap;
+}
+.acc-chevron {
+  width: 26px; height: 26px; border-radius: var(--radius-xs);
+  background: var(--bg2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--muted); flex-shrink: 0;
+  transition: transform var(--transition-s);
+}
+.acc-header.open .acc-chevron { transform: rotate(180deg); }
+.acc-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height .45s cubic-bezier(.4,0,.2,1), opacity .3s;
+  opacity: 0;
+}
+.acc-body.open { max-height: 3000px; opacity: 1; }
+.acc-inner {
+  border-top: 1.5px solid var(--border);
+  background: var(--bg2);
+  padding: 20px 22px;
+}
+/* Step layout inside accordion */
+.step-block { margin-bottom: 20px; }
+.step-block:last-child { margin-bottom: 0; }
+.step-num-row {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+}
+.sn-badge {
+  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+  background: var(--green); color: #fff;
+  font-family: var(--font-head); font-size: .8rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.sn-title { font-weight: 700; font-size: .95rem; color: var(--text); }
+.math-block {
+  background: var(--surface); border-left: 3px solid var(--green-mid);
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+  padding: 14px 18px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: .88rem; line-height: 2; color: var(--text2);
+  white-space: pre-wrap;
+}
+.math-block .hl  { color: var(--green);  font-weight: 700; }
+.math-block .hlt { color: var(--terra);  font-weight: 700; }
+.math-block .hlg { color: var(--gold);   font-weight: 700; }
+.math-block .hln { color: var(--navy);   font-weight: 700; }
+
+/* ═══ ACTION CARD ════════════════════════════════════════════ */
+.action-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* ═══ HISTORY TABLE ══════════════════════════════════════════ */
+.hist-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }  /* FIX #25 */
+.hist-wrap::-webkit-scrollbar { height: 4px; }
+.hist-wrap::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }
+.hist-wrap::-webkit-scrollbar-track { background: transparent; }
+table.hist-table {
+  width: 100%; border-collapse: collapse; font-size: .82rem;
+  min-width: 640px;
+}
+.hist-table th {
+  text-align: left; padding: 10px 14px;
+  font-size: .72rem; text-transform: uppercase; letter-spacing: .6px;
+  color: var(--muted); border-bottom: 1.5px solid var(--border);
+  background: var(--bg2); font-weight: 700;
+  position: sticky; top: 0;
+}
+.hist-table td {
+  padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text2);
+}
+.hist-table tr:last-child td { border-bottom: none; }
+.hist-table tr:hover td { background: var(--bg3); }
+.no-hist { color: var(--muted); text-align: center; padding: 28px 0; font-size: .9rem; }
+
+/* ═══ TOAST ══════════════════════════════════════════════════ */
+#toast {
+  position: fixed; bottom: 28px; left: 50%;
+  transform: translateX(-50%) translateY(60px);
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 100px; padding: 12px 26px;
+  font-size: .88rem; font-weight: 600;
+  box-shadow: var(--shadow-lg);
+  transition: transform .32s cubic-bezier(.4,0,.2,1), opacity .32s;
+  opacity: 0; z-index: 9999; white-space: nowrap;
+  display: flex; align-items: center; gap: 8px;
+}
+#toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+#toast.ok  { border-color: var(--green-mid); color: var(--green); }
+#toast.err { border-color: var(--terra-mid); color: var(--terra); }
+#toast.inf { border-color: var(--gold);      color: var(--gold); }
+
+/* ═══ FOOTER ═════════════════════════════════════════════════ */
+footer {
+  text-align: center; padding: 24px 0 0;
+  font-size: .78rem; color: var(--muted2);
+  border-top: 1px solid var(--border); margin-top: 20px;
+}
+footer a { color: var(--green); text-decoration: none; }
+
+/* ═══ ANIMATIONS ═════════════════════════════════════════════ */
+@keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+.card { animation: fadeUp .45s both; }
+
+/* ═══ RESPONSIVE ═════════════════════════════════════════════ */
+@media (max-width: 580px) {
+  .card { padding: 18px 14px; }
+  header { flex-direction: column; padding: 24px 0 20px; }
+  .header-controls { align-self: flex-end; }
+  .calorie-grid { grid-template-columns: 1fr 1fr; }
+  .macro-row { grid-template-columns: 1fr; }
+  .metrics-grid { grid-template-columns: 1fr 1fr; }
+  .btn-row { flex-direction: column; }
+  .btn { width: 100%; justify-content: center; }
+  .fg.span2 { grid-column: span 1; }
+  .height-dual { flex-direction: column; }
+  .action-row { flex-direction: column; }
+  .action-row .btn { width: 100%; justify-content: center; }
+}
+@media (min-width: 581px) and (max-width: 780px) {
+  .calorie-grid { grid-template-columns: 1fr 1fr; }
+  .macro-row { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   HELP MODAL SYSTEM
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Backdrop overlay ─────────────────────────────────────── */
+#help-backdrop {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(28, 26, 21, .55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0; pointer-events: none;
+  transition: opacity .35s cubic-bezier(.4,0,.2,1);
+}
+#help-backdrop.open { opacity: 1; pointer-events: all; }
+
+/* ── Panel (slide in from right) ──────────────────────────── */
+#help-panel {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 1001;
+  width: min(480px, 100vw);
+  background: var(--surface);
+  border-left: 1.5px solid var(--border);
+  box-shadow: -8px 0 48px rgba(28,26,21,.18);
+  display: flex; flex-direction: column;
+  transform: translateX(100%);
+  transition: transform .38s cubic-bezier(.4,0,.2,1);
+  overflow: hidden;
+}
+#help-panel.open { transform: translateX(0); }
+
+/* ── Panel header ─────────────────────────────────────────── */
+.hp-header {
+  flex-shrink: 0;
+  padding: 22px 24px 16px;
+  border-bottom: 1.5px solid var(--border);
+  background: var(--surface);
+  position: sticky; top: 0; z-index: 2;
+}
+.hp-top-row {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 12px;
+  margin-bottom: 14px;
+}
+.hp-title {
+  font-family: var(--font-head);
+  font-size: 1.35rem; font-weight: 700;
+  color: var(--text);
+  display: flex; align-items: center; gap: 10px;
+}
+.hp-title-icon {
+  width: 36px; height: 36px; border-radius: var(--radius-xs);
+  background: var(--green-pale); color: var(--green);
+  font-size: 18px; display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0;
+}
+[data-theme="dark"] .hp-title-icon { background: var(--green-pale); }
+.hp-close {
+  width: 36px; height: 36px; border-radius: var(--radius-xs);
+  background: var(--surface2); border: 1.5px solid var(--border);
+  color: var(--muted); font-size: 16px; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0;
+  transition: all var(--transition); line-height: 1;
+}
+.hp-close:hover { background: var(--terra-pale); border-color: var(--terra); color: var(--terra); }
+
+/* ── Search bar ───────────────────────────────────────────── */
+.hp-search-wrap { position: relative; }
+.hp-search-wrap svg {
+  position: absolute; left: 13px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted); pointer-events: none; flex-shrink: 0;
+}
+#help-search {
+  width: 100%; padding: 10px 14px 10px 40px;
+  background: var(--bg2); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text);
+  font-family: var(--font-body); font-size: .9rem;
+  outline: none; transition: border-color var(--transition), box-shadow var(--transition);
+}
+#help-search:focus {
+  border-color: var(--green-mid);
+  box-shadow: 0 0 0 3px rgba(64,145,108,.15);
+}
+#help-search::placeholder { color: var(--muted2); }
+
+/* ── Quick nav links ──────────────────────────────────────── */
+.hp-quicknav {
+  flex-shrink: 0;
+  padding: 10px 24px 0;
+  display: flex; gap: 8px; flex-wrap: wrap;
+  border-bottom: 1.5px solid var(--border);
+  padding-bottom: 12px;
+  background: var(--surface);
+}
+.qn-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 12px; border-radius: 100px;
+  background: var(--bg2); border: 1px solid var(--border);
+  font-size: .75rem; font-weight: 700; color: var(--muted);
+  cursor: pointer; text-decoration: none;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.qn-chip:hover { background: var(--green-pale); border-color: var(--green-light); color: var(--green); }
+
+/* ── Scrollable content area ──────────────────────────────── */
+.hp-body {
+  flex: 1; overflow-y: auto;
+  padding: 20px 24px 32px;
+  scroll-behavior: smooth;
+}
+.hp-body::-webkit-scrollbar { width: 5px; }
+.hp-body::-webkit-scrollbar-track { background: transparent; }
+.hp-body::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }
+
+/* ── No-results message ───────────────────────────────────── */
+.hp-no-results {
+  display: none; text-align: center; padding: 40px 0;
+  color: var(--muted); font-size: .92rem;
+}
+.hp-no-results.show { display: block; }
+
+/* ── Help accordion sections ──────────────────────────────── */
+.ha-section {
+  margin-bottom: 10px; border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border); overflow: hidden;
+  transition: border-color var(--transition);
+}
+.ha-section:hover { border-color: var(--border2); }
+.ha-section.ha-open { border-color: var(--green-light); }
+[data-theme="dark"] .ha-section.ha-open { border-color: var(--green-mid); }
+
+.ha-btn {
+  width: 100%; text-align: left; border: none;
+  background: var(--surface2);
+  padding: 15px 18px;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 12px;
+  transition: background var(--transition);
+}
+.ha-btn:hover { background: var(--bg3); }
+.ha-section.ha-open .ha-btn { background: var(--green-pale); }
+[data-theme="dark"] .ha-section.ha-open .ha-btn { background: var(--green-pale); }
+
+.ha-icon {
+  width: 34px; height: 34px; border-radius: var(--radius-xs);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+  background: var(--surface); border: 1px solid var(--border);
+  transition: all var(--transition);
+}
+.ha-section.ha-open .ha-icon {
+  background: var(--green); border-color: var(--green);
+  filter: brightness(1.1);
+}
+.ha-section.ha-open .ha-icon span { filter: brightness(10); }
+
+.ha-label {
+  flex: 1; font-family: var(--font-body);
+  font-size: .95rem; font-weight: 700; color: var(--text);
+  line-height: 1.2;
+}
+.ha-section.ha-open .ha-label { color: var(--green); }
+[data-theme="dark"] .ha-section.ha-open .ha-label { color: var(--green-mid); }
+
+.ha-chevron {
+  width: 24px; height: 24px; border-radius: 6px;
+  background: var(--bg2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: var(--muted); flex-shrink: 0;
+  transition: transform .32s cubic-bezier(.4,0,.2,1), background var(--transition);
+}
+.ha-section.ha-open .ha-chevron { transform: rotate(180deg); background: var(--green-pale); }
+
+.ha-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height .4s cubic-bezier(.4,0,.2,1), opacity .3s;
+  opacity: 0;
+}
+.ha-section.ha-open .ha-body { max-height: 2400px; opacity: 1; }
+
+.ha-inner {
+  padding: 18px 18px 20px;
+  border-top: 1.5px solid var(--border);
+  background: var(--bg2);
+}
+
+/* ── Content blocks inside help ───────────────────────────── */
+.h-step {
+  display: flex; gap: 12px; align-items: flex-start;
+  margin-bottom: 12px;
+}
+.h-step:last-child { margin-bottom: 0; }
+.h-step-num {
+  width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+  background: var(--green); color: #fff;
+  font-size: .78rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+.h-step-text { flex: 1; font-size: .9rem; color: var(--text2); line-height: 1.6; }
+.h-step-text strong { color: var(--text); font-weight: 700; }
+
+.h-def {
+  background: var(--surface); border-radius: var(--radius-xs);
+  border-left: 3px solid var(--green-mid);
+  padding: 12px 14px; margin-bottom: 10px;
+}
+.h-def:last-child { margin-bottom: 0; }
+.h-def-term {
+  font-weight: 700; color: var(--text); font-size: .9rem;
+  margin-bottom: 4px;
+  display: flex; align-items: center; gap: 8px;
+}
+.h-def-icon { font-size: 1rem; }
+.h-def-desc { font-size: .85rem; color: var(--muted); line-height: 1.6; }
+.h-def-formula {
+  margin-top: 6px; padding: 6px 10px;
+  background: var(--bg2); border-radius: var(--radius-xs);
+  font-family: 'Courier New', monospace; font-size: .8rem;
+  color: var(--green); font-weight: 700;
+}
+
+.h-act-row {
+  display: flex; gap: 10px; align-items: flex-start;
+  margin-bottom: 10px; padding: 12px 14px;
+  background: var(--surface); border-radius: var(--radius-xs);
+  border: 1px solid var(--border);
+}
+.h-act-row:last-child { margin-bottom: 0; }
+.h-act-badge {
+  flex-shrink: 0; padding: 3px 10px; border-radius: 100px;
+  font-size: .72rem; font-weight: 700;
+  background: var(--green-pale); color: var(--green);
+  white-space: nowrap; margin-top: 1px;
+}
+.h-act-row.la .h-act-badge { background: var(--blue-pale);  color: var(--navy); }
+.h-act-row.ma .h-act-badge { background: var(--green-pale); color: var(--green); }
+.h-act-row.va .h-act-badge { background: var(--gold-pale);  color: var(--gold); }
+.h-act-row.ea .h-act-badge { background: var(--terra-pale); color: var(--terra); }
+.h-act-row.sd .h-act-badge { background: var(--bg3);        color: var(--muted); }
+
+.h-act-info { flex: 1; }
+.h-act-title { font-weight: 700; font-size: .88rem; color: var(--text); margin-bottom: 2px; }
+.h-act-desc  { font-size: .82rem; color: var(--muted); line-height: 1.5; }
+.h-act-mul   { font-size: .78rem; color: var(--green); font-weight: 700; margin-top: 3px; }
+
+.h-result-row {
+  display: flex; gap: 10px; align-items: flex-start;
+  margin-bottom: 8px; padding: 10px 13px;
+  background: var(--surface); border-radius: var(--radius-xs);
+  border-left: 3px solid var(--border);
+}
+.h-result-row.r-maint { border-left-color: var(--green); }
+.h-result-row.r-loss  { border-left-color: var(--terra); }
+.h-result-row.r-gain  { border-left-color: var(--navy); }
+.h-result-row:last-child { margin-bottom: 0; }
+.h-result-em {
+  font-size: .8rem; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .5px; flex-shrink: 0;
+  padding-top: 2px; min-width: 80px;
+}
+.h-result-row.r-maint .h-result-em { color: var(--green); }
+.h-result-row.r-loss  .h-result-em { color: var(--terra); }
+.h-result-row.r-gain  .h-result-em { color: var(--navy); }
+.h-result-text { font-size: .85rem; color: var(--muted); line-height: 1.55; }
+
+.h-disclaimer {
+  margin-top: 14px; padding: 12px 14px;
+  background: var(--gold-pale); border-radius: var(--radius-xs);
+  border: 1px solid var(--gold); display: flex; gap: 10px;
+  align-items: flex-start; font-size: .82rem; color: var(--text2);
+  line-height: 1.6;
+}
+.h-disclaimer-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+/* ── Divider inside help ──────────────────────────────────── */
+.h-divider {
+  height: 1px; background: var(--border);
+  margin: 14px 0;
+}
+
+/* ── Panel footer ─────────────────────────────────────────── */
+.hp-footer {
+  flex-shrink: 0; padding: 14px 24px;
+  border-top: 1.5px solid var(--border);
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px;
+}
+.hp-footer-note { font-size: .78rem; color: var(--muted2); line-height: 1.5; }
+.hp-footer-note strong { color: var(--muted); }
+.hp-close-btn {
+  padding: 9px 20px; border-radius: var(--radius-sm); border: none;
+  background: var(--green); color: #fff;
+  font-family: var(--font-body); font-size: .88rem; font-weight: 700;
+  cursor: pointer; transition: all var(--transition);
+  display: flex; align-items: center; gap: 7px;
+}
+.hp-close-btn:hover { background: var(--green-mid); }
+
+/* ══ TOOLTIP SYSTEM ══════════════════════════════════════════ */
+.tt-wrap {
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.tt-icon {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--bg3); border: 1px solid var(--border2);
+  color: var(--muted); font-size: .65rem; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: help; position: relative; flex-shrink: 0;
+  transition: all var(--transition);
+}
+.tt-icon:hover { background: var(--green-pale); border-color: var(--green-light); color: var(--green); }
+.tt-icon::after {
+  content: attr(data-tip);
+  position: absolute; bottom: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%);
+  background: var(--text); color: var(--bg);
+  font-family: var(--font-body); font-size: .75rem; font-weight: 500;
+  padding: 6px 10px; border-radius: var(--radius-xs);
+  white-space: nowrap; max-width: 220px; white-space: normal;
+  line-height: 1.45; text-align: center;
+  pointer-events: none; opacity: 0;
+  transition: opacity .18s; z-index: 500;
+  box-shadow: var(--shadow);
+}
+.tt-icon::before {
+  content: '';
+  position: absolute; bottom: calc(100% + 2px); left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--text);
+  pointer-events: none; opacity: 0;
+  transition: opacity .18s; z-index: 500;
+}
+.tt-icon:hover::after,
+.tt-icon:hover::before { opacity: 1; }
+
+/* ── Help button pulsing badge ────────────────────────────── */
+.help-btn-wrap { position: relative; }
+.help-new-dot {
+  position: absolute; top: -3px; right: -3px;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--terra);
+  border: 2px solid var(--surface);
+  animation: dotPulse 2s infinite;
+}
+@keyframes dotPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.3); opacity: .7; }
+}
+
+/* ── Highlighted search match ─────────────────────────────── */
+.hl-match {
+  background: var(--gold-pale);
+  border-radius: 2px; padding: 0 2px;
+  color: var(--gold);
+}
+
+@media (max-width: 580px) {
+  #help-panel { width: 100vw; border-left: none; border-top: 1.5px solid var(--border); }
+  .hp-header { padding: 18px 16px 14px; }
+  .hp-body { padding: 16px 16px 28px; }
+  .hp-quicknav { padding: 8px 16px 10px; }
+  .hp-footer { padding: 12px 16px; }
+}
+
+/* ═══ THREE-DOTS DROPDOWN MENU ══════════════════════════════ */
+.dots-wrap {
+  position: relative;
+}
+.dots-btn {
+  width: 42px; height: 22px; border-radius: var(--radius-sm);
+  background: var(--surface); border: 1.5px solid var(--border);
+  color: var(--text2); font-size: 20px; font-weight: 900;
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; transition: all var(--transition);
+  flex-shrink: 0; letter-spacing: .5px; line-height: 1;
+  padding-bottom: 4px;
+}
+.dots-btn:hover,
+.dots-btn.open { border-color: var(--green); color: var(--green); background: var(--green-pale); }
+
+.dots-menu {
+  position: absolute; top: calc(100% + 8px); right: 0;
+  min-width: 190px;
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); box-shadow: var(--shadow-lg);
+  overflow: hidden; z-index: 600;
+  opacity: 0; transform: translateY(-8px) scale(.97);
+  pointer-events: none;
+  transition: opacity .2s cubic-bezier(.4,0,.2,1),
+              transform .2s cubic-bezier(.4,0,.2,1);
+}
+.dots-menu.open {
+  opacity: 1; transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+.dm-item {
+  display: flex; align-items: center; gap: 11px;
+  padding: 12px 16px; cursor: pointer;
+  font-family: var(--font-body); font-size: .9rem;
+  font-weight: 600; color: var(--text2);
+  background: transparent; border: none; width: 100%;
+  text-align: left; transition: background var(--transition), color var(--transition);
+  border-bottom: 1px solid var(--border);
+}
+.dm-item:last-child { border-bottom: none; }
+.dm-item:hover { background: var(--green-pale); color: var(--green); }
+.dm-item .dmi-icon {
+  width: 28px; height: 28px; border-radius: var(--radius-xs);
+  background: var(--bg2); display: flex; align-items: center;
+  justify-content: center; font-size: 15px; flex-shrink: 0;
+  transition: background var(--transition);
+}
+.dm-item:hover .dmi-icon { background: var(--green-pale); }
+
+/* ═══ HISTORY ACCORDION (replaces hidden card) ═══════════════ */
+.hist-accordion {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden; margin-bottom: 18px;
+  box-shadow: var(--shadow-card);
+}
+.hist-acc-btn {
+  width: 100%; text-align: left; border: none;
+  background: var(--surface); color: var(--text);
+  padding: 18px 22px;
+  font-family: var(--font-head); font-size: 1.05rem; font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 12px;
+  transition: background var(--transition);
+}
+.hist-acc-btn:hover { background: var(--surface2); }
+.hist-acc-btn .ct-icon { width:34px;height:34px;border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0; }
+.hist-acc-btn .ha-flex { flex:1; }
+.hist-acc-chevron {
+  width: 26px; height: 26px; border-radius: var(--radius-xs);
+  background: var(--bg2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--muted);
+  transition: transform .32s cubic-bezier(.4,0,.2,1);
+}
+.hist-accordion.h-open .hist-acc-btn { background: var(--surface2); }
+.hist-accordion.h-open .hist-acc-chevron { transform: rotate(180deg); }
+.hist-acc-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height .42s cubic-bezier(.4,0,.2,1), opacity .3s;
+  opacity: 0;
+}
+.hist-accordion.h-open .hist-acc-body { max-height: 1200px; opacity: 1; }
+.hist-acc-inner {
+  border-top: 1.5px solid var(--border);
+  background: var(--surface);
+  padding: 20px 22px 22px;
+}
+
+</style>
+</head>
+<body>
+<div class="bg-orbs"></div>
+
+<div id="app">
+
+  <!-- ══════════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════════ -->
+  <header>
+    <div class="header-brand">
+      <div class="brand-tag">🌿 Clinical Nutrition Tool</div>
+      <h1>NutriCalc <em>Pro</em></h1>
+      <p>Complete fitness & nutrition assessment — BMR, TDEE, BMI, DBW, AdjBW & Macros in one click.</p>
+    </div>
+    <div class="header-controls">
+      <div class="dots-wrap" id="dotsWrap">
+        <button class="dots-btn" id="dotsBtn" aria-label="Menu" onclick="toggleDotsMenu(event)">...</button>
+        <div class="dots-menu" id="dotsMenu">
+          <button class="dm-item" onclick="dotsTheme()">
+            <span class="dmi-icon" id="dotsThemeIcon">🌙</span>
+            <span id="dotsThemeLabel">Dark Mode</span>
+          </button>
+          <button class="dm-item" onclick="dotsHelp()">
+            <span class="dmi-icon" style="font-size:13px;font-weight:800;font-family:var(--font-head);">?</span>
+            <span>Help &amp; Guide</span>
+          </button>
+        </div>
+        <div class="help-new-dot" id="helpDot"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════
+       UNIT BAR
+  ══════════════════════════════════════════ -->
+  <div class="unit-bar">
+    <div class="unit-group">
+      <label>Height</label>
+      <div class="seg-ctrl">
+        <button id="uMetric"   class="active" onclick="setUnit('metric')">cm</button>
+        <button id="uImperial" onclick="setUnit('imperial')">ft &amp; in</button>
+      </div>
+    </div>
+    <div class="unit-divider"></div>
+    <div class="unit-group">
+      <label>Weight</label>
+      <div class="seg-ctrl">
+        <button id="wKg"  class="active" onclick="setWeightUnit('kg')">kg</button>
+        <button id="wLbs" onclick="setWeightUnit('lbs')">lbs</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       INPUT CARD
+  ══════════════════════════════════════════ -->
+  <div class="card">
+    <div class="card-title">
+      <span class="ct-icon green">📝</span>
+      Personal Details
+    </div>
+
+    <div class="form-grid">
+
+      <!-- Name -->
+      <div class="fg">
+        <label>
+          <span class="tt-wrap">Full Name
+            <span class="tt-icon" data-tip="Your name is saved with your results for easy tracking.">i</span>
+          </span>
+        </label>
+        <input type="text" id="i-name" placeholder="e.g. Maria Santos" autocomplete="name" maxlength="60"/>
+      </div>
+
+      <!-- Age -->
+      <div class="fg">
+        <label>
+          <span class="tt-wrap">Age (years)
+            <span class="tt-icon" data-tip="Age affects your BMR — metabolism slows slightly each year.">i</span>
+          </span>
+        </label>
+        <div class="input-wrap">
+          <input type="number" id="i-age" placeholder="30" min="10" max="120" step="1"/>
+          <span class="input-suffix">yrs</span>
+        </div>
+      </div>
+
+      <!-- Sex -->
+      <div class="fg">
+        <label>
+          <span class="tt-wrap">Biological Sex
+            <span class="tt-icon" data-tip="Used in the Mifflin–St Jeor formula. Males add +5, females subtract 161 from the base BMR.">i</span>
+          </span>
+        </label>
+        <div class="sex-row">
+          <button class="sex-btn active-m" id="sex-m" onclick="setSex('male')"   aria-pressed="true">♂ Male</button>
+          <button class="sex-btn"           id="sex-f" onclick="setSex('female')" aria-pressed="false">♀ Female</button>
+        </div>
+      </div>
+
+      <!-- Height (cm) -->
+      <div class="fg" id="h-cm-group">
+        <label>
+          <span class="tt-wrap">Height
+            <span class="tt-icon" data-tip="Used in BMR, BMI, and DBW formulas. Switch to ft/in using the toggle above.">i</span>
+          </span>
+        </label>
+        <div class="input-wrap">
+          <input type="number" id="i-height-cm" placeholder="165" min="50" max="300"/>
+          <span class="input-suffix">cm</span>
+        </div>
+      </div>
+
+      <!-- Height (ft + in) — hidden by default -->
+      <div class="fg" id="h-ft-group" style="display:none;">
+        <label>
+          <span class="tt-wrap">Height
+            <span class="tt-icon" data-tip="Enter feet and inches separately. DBW uses total inches above 5ft.">i</span>
+          </span>
+        </label>
+        <div class="height-dual">
+          <div class="input-wrap">
+            <input type="number" id="i-height-ft" placeholder="5" min="1" max="9"/>
+            <span class="input-suffix">ft</span>
+          </div>
+          <div class="input-wrap">
+            <input type="number" id="i-height-in" placeholder="5" min="0" max="11"/>
+            <span class="input-suffix">in</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weight -->
+      <div class="fg">
+        <label>
+          <span class="tt-wrap">Weight
+            <span class="tt-icon" data-tip="Your actual body weight. Used in BMR, BMI, AdjBW, and macro calculations.">i</span>
+          </span>
+        </label>
+        <div class="input-wrap">
+          <input type="number" id="i-weight" placeholder="70" min="20" max="500" step="0.1"/>
+          <span class="input-suffix" id="weight-suffix">kg</span>
+        </div>
+        <div id="weight-convert-hint" style="display:none;font-size:.74rem;color:var(--muted);margin-top:4px;">💡 Tip: lbs ÷ 2.205 = kg</div>
+      </div>
+
+      <!-- Activity Level -->
+      <div class="fg span-full">
+        <label>
+          <span class="tt-wrap">Activity Level
+            <span class="tt-icon" data-tip="Your activity multiplier is applied to BMR to calculate TDEE — how many calories you actually burn daily.">i</span>
+          </span>
+        </label>
+        <select id="i-activity">
+          <option value="1.2">🪑 Sedentary — little or no exercise</option>
+          <option value="1.375" selected>🚶 Lightly Active — exercise 1–3 days/week</option>
+          <option value="1.55">🏃 Moderately Active — exercise 3–5 days/week</option>
+          <option value="1.725">🔥 Very Active — exercise 6–7 days/week</option>
+          <option value="1.9">🏆 Extra Active — athlete level</option>
+        </select>
+      </div>
+
+    </div><!-- /form-grid -->
+
+    <!-- Live preview bar — FIX #18 -->
+    <div id="preview-bar" aria-live="polite" aria-atomic="true">
+      <span class="pb-item"><span class="pb-label">BMR:</span> <span id="pb-bmr">—</span> cal</span>
+      <span class="pb-item"><span class="pb-label">TDEE:</span> <span id="pb-tdee">—</span> cal/day</span>
+      <span class="pb-item"><span class="pb-label">BMI:</span> <span id="pb-bmi">—</span></span>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-calc" onclick="calculateAll()">
+        🌿 Calculate All Results
+      </button>
+      <button class="btn btn-reset" onclick="resetAll()">↺ Reset</button>
+    </div>
+  </div><!-- /input card -->
+
+
+  <!-- ══════════════════════════════════════════
+       RESULTS
+  ══════════════════════════════════════════ -->
+  <div id="results-wrap">
+
+    <!-- ── MEDICAL DISCLAIMER (FIX #11) ──────────────── -->
+    <div style="margin:8px 0 18px;padding:12px 16px;background:var(--gold-pale);border:1.5px solid var(--gold);border-radius:var(--radius-sm);font-size:.82rem;color:var(--text2);line-height:1.65;display:flex;gap:10px;align-items:flex-start;">
+      <span style="font-size:1.1rem;flex-shrink:0;">⚠️</span>
+      <span><strong>Important:</strong> All results are <em>estimates</em> based on population-level formulas. Individual needs vary by genetics, health status, and medications. These results are <strong>not medical advice</strong>. Always consult a registered dietitian or healthcare professional before making significant dietary changes.</span>
+    </div>
+
+    <!-- ── CALORIE NEEDS ────────────────── -->
+    <div class="section-label">🔥 Calorie Needs</div>
+    <div class="calorie-grid">
+      <div class="cal-tile maint">
+        <div class="tl">🟢 Maintenance</div>
+        <div class="tv" id="r-maint">—</div>
+        <div class="ts">cal / day (TDEE)</div>
+      </div>
+      <div class="cal-tile bmr">
+        <div class="tl">✨ BMR (at rest)</div>
+        <div class="tv" id="r-bmr">—</div>
+        <div class="ts">basal metabolic rate</div>
+      </div>
+      <div class="cal-tile loss">
+        <div class="tl">🔻 Fat Loss</div>
+        <div class="tv" id="r-loss">—</div>
+        <div class="ts">TDEE − 500 cal/day</div>
+        <div id="fat-loss-floor-note" style="display:none;font-size:.72rem;color:var(--terra);margin-top:6px;line-height:1.4;"></div>
+      </div>
+      <div class="cal-tile gain">
+        <div class="tl">🔺 Muscle Gain</div>
+        <div class="tv" id="r-gain">—</div>
+        <div class="ts">TDEE + 300 (lean bulk)</div>
+      </div>
+    </div><!-- /calorie-grid -->
+
+    <!-- ── BODY METRICS ─────────────────── -->
+    <div class="section-label">📊 Body Metrics</div>
+    <div class="metrics-grid">
+      <!-- BMI -->
+      <div class="metric-tile" style="grid-column: span 2;">
+        <div class="mt-icon">📏</div>
+        <div class="mt-label">Body Mass Index (BMI)</div>
+        <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
+          <div class="mt-val" id="r-bmi">—</div>
+          <div id="r-bmi-badge" class="bmi-badge nw">Normal</div>
+        </div>
+        <div class="bmi-bar-wrap">
+          <div class="bmi-track" role="img" id="bmi-track-el"><div class="bmi-pin" id="bmi-pin" style="left:40%"></div></div>
+          <div class="bmi-ticks"><span>10</span><span>18.5</span><span>25</span><span>30</span><span>45+</span></div>
+          <div id="bmi-extreme-warn" style="display:none;font-size:.74rem;color:var(--terra);margin-top:6px;font-weight:600;"></div>
+        </div>
+      </div>
+      <!-- DBW -->
+      <div class="metric-tile">
+        <div class="mt-icon">⚖️</div>
+        <div class="mt-label">Desirable Body Wt (DBW)</div>
+        <div class="mt-val" id="r-dbw">—</div>
+        <div class="mt-sub" id="r-dbw-sub">kg</div>
+      </div>
+      <!-- AdjBW -->
+      <div class="metric-tile" id="adjbw-tile">
+        <div class="mt-icon">🔄</div>
+        <div class="mt-label">Adjusted Body Wt (AdjBW)</div>
+        <div class="mt-val" id="r-adjbw">—</div>
+        <div class="mt-sub" id="r-adjbw-sub">kg (used if overweight)</div>
+      </div>
+    </div><!-- /metrics-grid -->
+
+    <!-- ── MACROS ────────────────────────── -->
+    <div class="section-label">🥗 Daily Macronutrients</div>
+    <!-- Macro proportion bar -->
+    <div class="macro-bar-wrap">
+      <div class="macro-bar-track">
+        <div class="macro-seg p" id="mseg-p" style="width:30%"></div>
+        <div class="macro-seg f" id="mseg-f" style="width:20%"></div>
+        <div class="macro-seg c" id="mseg-c" style="width:50%"></div>
+      </div>
+      <div class="macro-bar-legend">
+        <div class="mbl-item"><div class="mbl-dot" style="background:var(--green-mid)"></div><span id="mbl-p">Protein —%</span></div>
+        <div class="mbl-item"><div class="mbl-dot" style="background:var(--gold)"></div><span id="mbl-f">Fat —%</span></div>
+        <div class="mbl-item"><div class="mbl-dot" style="background:var(--terra-mid)"></div><span id="mbl-c">Carbs —%</span></div>
+      </div>
+    </div>
+    <div class="macro-row">
+      <div class="macro-tile prot">
+        <div class="mac-icon">🥩</div>
+        <div class="mac-label">Protein</div>
+        <div class="mac-val" id="r-prot">—g</div>
+        <div class="mac-kcal" id="r-prot-kcal">— kcal</div>
+        <div class="mac-pct" id="r-prot-pct">— %</div>
+      </div>
+      <div class="macro-tile fat">
+        <div class="mac-icon">🥑</div>
+        <div class="mac-label">Fat</div>
+        <div class="mac-val" id="r-fat">—g</div>
+        <div class="mac-kcal" id="r-fat-kcal">— kcal</div>
+        <div class="mac-pct" id="r-fat-pct">— %</div>
+      </div>
+      <div class="macro-tile carb">
+        <div class="mac-icon">🍚</div>
+        <div class="mac-label">Carbohydrates</div>
+        <div class="mac-val" id="r-carb">—g</div>
+        <div class="mac-kcal" id="r-carb-kcal">— kcal</div>
+        <div class="mac-pct" id="r-carb-pct">— %</div>
+      </div>
+    </div>
+
+    <!-- ── STEP-BY-STEP ACCORDIONS ──────── -->
+    <div class="section-label">🧮 Step-by-Step Calculations</div>
+
+    <!-- BMR Steps -->
+    <div class="accordion">
+      <button class="acc-header" onclick="toggleAcc(this)">
+        <span class="ah-left">
+          <span>📐 BMR &amp; TDEE Calculation</span>
+          <span class="ah-pill">Mifflin–St Jeor</span>
+        </span>
+        <span class="acc-chevron">▼</span>
+      </button>
+      <div class="acc-body">
+        <div class="acc-inner" id="steps-bmr"></div>
+      </div>
+    </div>
+
+    <!-- BMI Steps -->
+    <div class="accordion">
+      <button class="acc-header" onclick="toggleAcc(this)">
+        <span class="ah-left">
+          <span>📊 BMI Calculation</span>
+          <span class="ah-pill">WHO Formula</span>
+        </span>
+        <span class="acc-chevron">▼</span>
+      </button>
+      <div class="acc-body">
+        <div class="acc-inner" id="steps-bmi"></div>
+      </div>
+    </div>
+
+    <!-- DBW / AdjBW Steps -->
+    <div class="accordion">
+      <button class="acc-header" onclick="toggleAcc(this)">
+        <span class="ah-left">
+          <span>⚖️ DBW &amp; AdjBW Calculation</span>
+          <span class="ah-pill">NDAP Formula</span>
+        </span>
+        <span class="acc-chevron">▼</span>
+      </button>
+      <div class="acc-body">
+        <div class="acc-inner" id="steps-dbw"></div>
+      </div>
+    </div>
+
+    <!-- Macro Steps -->
+    <div class="accordion">
+      <button class="acc-header" onclick="toggleAcc(this)">
+        <span class="ah-left">
+          <span>🥗 Macronutrient Calculation</span>
+          <span class="ah-pill">Clinical Reference</span>
+        </span>
+        <span class="acc-chevron">▼</span>
+      </button>
+      <div class="acc-body">
+        <div class="acc-inner" id="steps-macro"></div>
+      </div>
+    </div>
+
+    <!-- ── ACTIONS ────────────────────────── -->
+    <div class="card" style="margin-top:20px;">
+      <div class="card-title">
+        <span class="ct-icon terra">📤</span>
+        Export &amp; Share
+      </div>
+      <div class="action-row">
+        <button class="btn btn-terra btn-sm" onclick="exportSVG()">📸 Save as Image</button>
+        <button class="btn btn-outline btn-sm" onclick="shareResults()">🔗 Share Results</button>
+        <button class="btn btn-outline btn-sm" id="syncBtn" onclick="syncSheets()">☁️ Sync to Google Sheets</button>
+      </div>
+      <p style="font-size:.78rem;color:var(--muted);margin-top:12px;line-height:1.7;">
+        ☁️ Results auto-sync to Google Sheets on Calculate.<br/>
+        Replace <code style="color:var(--green);background:var(--green-pale);padding:1px 6px;border-radius:4px;">GOOGLE_SCRIPT_URL</code> in the &lt;script&gt; with your deployed Apps Script web app URL.
+      </p>
+    </div>
+
+  </div><!-- /results-wrap -->
+
+
+  <!-- ══════════════════════════════════════════
+       HISTORY ACCORDION
+  ══════════════════════════════════════════ -->
+  <div class="hist-accordion" id="hist-card">
+    <button class="hist-acc-btn" onclick="toggleHistAccordion()">
+      <span class="ct-icon navy" style="background:var(--blue-pale);">📋</span>
+      <span class="ha-flex">Calculation History</span>
+      <span class="hist-acc-chevron">▼</span>
+    </button>
+    <div class="hist-acc-body">
+      <div class="hist-acc-inner">
+        <div class="hist-wrap" id="hist-content">
+          <p class="no-hist">No history yet. Run a calculation to see results here.</p>
+        </div>
+        <button class="btn btn-reset btn-sm" style="margin-top:14px;" onclick="clearHist()">🗑️ Clear History</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>NutriCalc Pro — For educational and informational purposes only.</p>
+    <p style="margin-top:4px;">Always consult a registered dietitian or healthcare professional before making dietary changes.</p>
+
+    <div style="margin-top:20px; padding-top:18px; border-top:1px solid var(--border);">
+      <p style="font-size:.82rem; color:var(--muted); margin-bottom:10px;">Have questions, issues, or concerns?</p>
+      <a href="https://m.me/j/AbbKMGya19akJm6v/"
+         target="_blank" rel="noopener noreferrer"
+         aria-label="Contact support via Messenger"
+         style="
+           display:inline-flex; align-items:center; gap:6px;
+           padding:7px 14px; border-radius:100px;
+           background:linear-gradient(135deg,#0084ff,#0066cc);
+           color:#fff; font-family:var(--font-body);
+           font-size:.76rem; font-weight:700;
+           text-decoration:none; letter-spacing:.2px;
+           box-shadow:0 2px 8px rgba(0,102,204,.28);
+           transition:transform .2s, box-shadow .2s;
+         "
+         onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 16px rgba(0,102,204,.4)'"
+         onmouseout="this.style.transform='';this.style.boxShadow='0 2px 8px rgba(0,102,204,.28)'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.477 2 2 6.145 2 11.243c0 2.908 1.438 5.504 3.688 7.2V22l3.37-1.85c.9.25 1.853.386 2.942.386 5.523 0 10-4.145 10-9.243C22 6.145 17.523 2 12 2zm1.007 12.44l-2.55-2.72-4.976 2.72 5.474-5.81 2.613 2.72 4.913-2.72-5.474 5.81z"/>
+        </svg>
+        Message Us on Messenger
+      </a>
+      <p style="font-size:.75rem; color:var(--muted2); margin-top:8px;">We typically reply within 24 hours.</p>
+    </div>
+  </footer>
+
+</div><!-- /#app -->
+
+<!-- ══════════════════════════════════════════════════════════
+     HELP BACKDROP
+══════════════════════════════════════════════════════════ -->
+<div id="help-backdrop" onclick="closeHelp()"></div>
+
+<!-- ══════════════════════════════════════════════════════════
+     HELP PANEL
+══════════════════════════════════════════════════════════ -->
+<div id="help-panel" role="dialog" aria-modal="true" aria-label="Help and User Guide">
+
+  <!-- Panel header -->
+  <div class="hp-header">
+    <div class="hp-top-row">
+      <div class="hp-title">
+        <div class="hp-title-icon">📖</div>
+        Help &amp; User Guide
+      </div>
+      <button class="hp-close" onclick="closeHelp()" aria-label="Close help panel">✕</button>
+    </div>
+    <!-- Search bar -->
+    <div class="hp-search-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="search" id="help-search" placeholder="Search topics… e.g. BMR, DBW, activity…"
+             oninput="filterHelp(this.value)" autocomplete="off"/>
+    </div>
+  </div>
+
+  <!-- Quick navigation chips -->
+  <div class="hp-quicknav">
+    <a class="qn-chip" onclick="jumpToSection('hs-howto')">🚀 How to Use</a>
+    <a class="qn-chip" onclick="jumpToSection('hs-calcs')">🧮 Calculations</a>
+    <a class="qn-chip" onclick="jumpToSection('hs-activity')">🏃 Activity Levels</a>
+    <a class="qn-chip" onclick="jumpToSection('hs-results')">📊 Results</a>
+  </div>
+
+  <!-- Scrollable content -->
+  <div class="hp-body" id="hp-body">
+
+    <!-- No results -->
+    <div class="hp-no-results" id="hp-no-results">
+      🔍 No topics found. Try different keywords.
+    </div>
+
+    <!-- ═══════════════════════════════════════
+         SECTION 1 — HOW TO USE
+    ═══════════════════════════════════════ -->
+    <div class="ha-section" id="hs-howto" data-search="how to use steps enter name age height weight activity calculate results">
+      <button class="ha-btn" onclick="toggleHelp(this)">
+        <div class="ha-icon"><span>🚀</span></div>
+        <div class="ha-label">How to Use the Calculator</div>
+        <div class="ha-chevron">▼</div>
+      </button>
+      <div class="ha-body">
+        <div class="ha-inner">
+
+          <div class="h-step">
+            <div class="h-step-num">1</div>
+            <div class="h-step-text">
+              <strong>Enter your personal details</strong> — Type your name, age, and select your biological sex using the Male / Female buttons.
+            </div>
+          </div>
+
+          <div class="h-step">
+            <div class="h-step-num">2</div>
+            <div class="h-step-text">
+              <strong>Enter your height</strong> — Use the toggle at the top to choose between centimetres (cm) or feet &amp; inches (ft/in). Enter your height in the field provided.
+            </div>
+          </div>
+
+          <div class="h-step">
+            <div class="h-step-num">3</div>
+            <div class="h-step-text">
+              <strong>Enter your weight in kilograms (kg)</strong> — Use your current actual body weight. You can use decimals (e.g. 70.5 kg).
+            </div>
+          </div>
+
+          <div class="h-step">
+            <div class="h-step-num">4</div>
+            <div class="h-step-text">
+              <strong>Select your activity level</strong> — Choose the option that best describes your typical weekly physical activity. When in doubt, choose Moderately Active.
+            </div>
+          </div>
+
+          <div class="h-step">
+            <div class="h-step-num">5</div>
+            <div class="h-step-text">
+              <strong>Press "🌿 Calculate All Results"</strong> — All six calculations will run simultaneously and your personalised results will appear below the form.
+            </div>
+          </div>
+
+          <div class="h-step">
+            <div class="h-step-num">6</div>
+            <div class="h-step-text">
+              <strong>Review your results</strong> — Scroll down to see your Calorie Needs, Body Metrics (BMI, DBW, AdjBW), and Daily Macronutrients.
+            </div>
+          </div>
+
+          <div class="h-step">
+            <div class="h-step-num">7</div>
+            <div class="h-step-text">
+              <strong>Expand the "Step-by-Step" dropdowns</strong> — Click any accordion panel under the results to see the exact mathematical formula using your real numbers.
+            </div>
+          </div>
+
+          <div class="h-divider"></div>
+
+          <div class="h-def" style="border-left-color: var(--gold);">
+            <div class="h-def-term" style="color:var(--gold);">💡 Pro Tips</div>
+            <div class="h-def-desc">
+              • The <strong>live preview bar</strong> shows your approximate BMR, TDEE, and BMI as you type — before pressing Calculate.<br/>
+              • Your last inputs are <strong>automatically saved</strong> to this browser. Refreshing the page will reload them.<br/>
+              • Use the <strong>📸 Save as Image</strong> button to download a summary card you can share or print.<br/>
+              • Press <strong>Enter</strong> on your keyboard to calculate instantly.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div><!-- /hs-howto -->
+
+    <!-- ═══════════════════════════════════════
+         SECTION 2 — CALCULATIONS EXPLAINED
+    ═══════════════════════════════════════ -->
+    <div class="ha-section" id="hs-calcs" data-search="bmr basal metabolic rate tdee total daily energy expenditure bmi body mass index dbw desirable body weight adjbw adjustable macros protein fat carbohydrates formula mifflin">
+      <button class="ha-btn" onclick="toggleHelp(this)">
+        <div class="ha-icon"><span>🧮</span></div>
+        <div class="ha-label">Explanation of Calculations</div>
+        <div class="ha-chevron">▼</div>
+      </button>
+      <div class="ha-body">
+        <div class="ha-inner">
+
+          <div class="h-def">
+            <div class="h-def-term"><span class="h-def-icon">✨</span> BMR — Basal Metabolic Rate</div>
+            <div class="h-def-desc">The number of calories your body burns at complete rest — just to keep your heart beating, lungs breathing, and organs functioning. Think of it as your body's "idle" energy consumption.</div>
+            <div class="h-def-formula">Male: (10 × kg) + (6.25 × cm) − (5 × age) + 5<br/>Female: (10 × kg) + (6.25 × cm) − (5 × age) − 161</div>
+          </div>
+
+          <div class="h-def">
+            <div class="h-def-term"><span class="h-def-icon">🔥</span> TDEE — Total Daily Energy Expenditure</div>
+            <div class="h-def-desc">The total calories you burn per day when your activity level is factored in. This is your true maintenance calorie number — eating at this level keeps your weight stable.</div>
+            <div class="h-def-formula">TDEE = BMR × Activity Multiplier</div>
+          </div>
+
+          <div class="h-def">
+            <div class="h-def-term"><span class="h-def-icon">📏</span> BMI — Body Mass Index</div>
+            <div class="h-def-desc">A simple screening tool that estimates whether your weight is in a healthy range for your height. Note: BMI does not measure body fat directly and doesn't account for muscle mass, age, or bone density.</div>
+            <div class="h-def-formula">BMI = weight(kg) ÷ height(m)²<br/>&lt;18.5 Underweight | 18.5–24.9 Normal | 25–29.9 Overweight | ≥30 Obese</div>
+          </div>
+
+          <div class="h-def">
+            <div class="h-def-term"><span class="h-def-icon">⚖️</span> DBW — Desirable Body Weight (Hamwi Formula)</div>
+            <div class="h-def-desc">The recommended body weight for your height based on the Hamwi formula, commonly used in clinical nutrition settings to calculate nutritional requirements. Note: this formula is validated for adults of average stature and extrapolates below its range for heights under 5ft.</div>
+            <div class="h-def-formula">Male: 112 + (4 × inches above 5ft) → ÷ 2.2046 = kg<br/>Female: 105 + (4 × inches above 5ft) → ÷ 2.2046 = kg</div>
+          </div>
+
+          <div class="h-def">
+            <div class="h-def-term"><span class="h-def-icon">🔄</span> AdjBW — Adjusted Body Weight</div>
+            <div class="h-def-desc">Applied automatically when BMI ≥ 25 (overweight or obese). AdjBW corrects for the fact that excess body fat is less metabolically active than lean mass, giving a more appropriate weight for nutrition calculations. Shown as N/A when not applicable.</div>
+            <div class="h-def-formula">AdjBW = DBW + 0.25 × (Actual Weight − DBW)</div>
+          </div>
+
+          <div class="h-def">
+            <div class="h-def-term"><span class="h-def-icon">🥗</span> Macronutrients (Protein, Fat, Carbs)</div>
+            <div class="h-def-desc">Protein targets are tiered by activity level (1.0–2.0 g/kg). Fat is set at 0.8 g/kg. Carbohydrates fill the remaining calories after protein and fat. The weight used for macros is automatically adjusted based on BMI (AdjBW if overweight, DBW if underweight, actual weight if normal). <strong>Macros shown are based on maintenance calories — adjust proportionally for fat loss or muscle gain goals.</strong></div>
+            <div class="h-def-formula">Protein = weight × 1.0–2.0 g/kg (by activity)<br/>Fat = weight × 0.8 g/kg<br/>Carbs = remaining calories ÷ 4</div>
+          </div>
+
+        </div>
+      </div>
+    </div><!-- /hs-calcs -->
+
+    <!-- ═══════════════════════════════════════
+         SECTION 3 — ACTIVITY LEVELS
+    ═══════════════════════════════════════ -->
+    <div class="ha-section" id="hs-activity" data-search="activity level sedentary lightly active moderately very extra athlete exercise multiplier">
+      <button class="ha-btn" onclick="toggleHelp(this)">
+        <div class="ha-icon"><span>🏃</span></div>
+        <div class="ha-label">Activity Level Guide</div>
+        <div class="ha-chevron">▼</div>
+      </button>
+      <div class="ha-body">
+        <div class="ha-inner">
+
+          <p style="font-size:.85rem; color:var(--muted); margin-bottom:12px; line-height:1.6;">
+            Choosing the right level is important — selecting too high will overestimate your calorie needs.
+            When unsure, err on the <strong style="color:var(--text)">lower side</strong>.
+          </p>
+
+          <div class="h-act-row sd">
+            <div class="h-act-badge">×1.2</div>
+            <div class="h-act-info">
+              <div class="h-act-title">🪑 Sedentary</div>
+              <div class="h-act-desc">Little or no exercise. Desk job. Minimal walking. Most of the day is spent sitting.</div>
+              <div class="h-act-mul">Multiplier: 1.2 — Typical for office workers with no exercise routine</div>
+            </div>
+          </div>
+
+          <div class="h-act-row la">
+            <div class="h-act-badge">×1.375</div>
+            <div class="h-act-info">
+              <div class="h-act-title">🚶 Lightly Active</div>
+              <div class="h-act-desc">Light exercise or sports 1–3 days per week. Casual walks, yoga, light gym sessions.</div>
+              <div class="h-act-mul">Multiplier: 1.375 — Good for those with occasional exercise</div>
+            </div>
+          </div>
+
+          <div class="h-act-row ma">
+            <div class="h-act-badge">×1.55</div>
+            <div class="h-act-info">
+              <div class="h-act-title">🏃 Moderately Active</div>
+              <div class="h-act-desc">Moderate exercise or sports 3–5 days per week. Regular gym sessions, cycling, swimming.</div>
+              <div class="h-act-mul">Multiplier: 1.55 — The most common choice for regular exercisers</div>
+            </div>
+          </div>
+
+          <div class="h-act-row va">
+            <div class="h-act-badge">×1.725</div>
+            <div class="h-act-info">
+              <div class="h-act-title">🔥 Very Active</div>
+              <div class="h-act-desc">Hard exercise or sports 6–7 days per week. Daily intense training, physical job.</div>
+              <div class="h-act-mul">Multiplier: 1.725 — For dedicated daily trainers</div>
+            </div>
+          </div>
+
+          <div class="h-act-row ea">
+            <div class="h-act-badge">×1.9</div>
+            <div class="h-act-info">
+              <div class="h-act-title">🏆 Extra Active</div>
+              <div class="h-act-desc">Athlete-level training or a very physically demanding job (e.g. construction, military). Two-a-day workouts.</div>
+              <div class="h-act-mul">Multiplier: 1.9 — Only for elite athletes or manual labourers</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div><!-- /hs-activity -->
+
+    <!-- ═══════════════════════════════════════
+         SECTION 4 — UNDERSTANDING RESULTS
+    ═══════════════════════════════════════ -->
+    <div class="ha-section" id="hs-results" data-search="results maintenance fat loss muscle gain calories understanding what to do next target goal">
+      <button class="ha-btn" onclick="toggleHelp(this)">
+        <div class="ha-icon"><span>📊</span></div>
+        <div class="ha-label">Understanding Your Results</div>
+        <div class="ha-chevron">▼</div>
+      </button>
+      <div class="ha-body">
+        <div class="ha-inner">
+
+          <p style="font-size:.85rem; color:var(--muted); margin-bottom:12px; line-height:1.6;">
+            Once you calculate, three calorie targets are shown. Choose the one that matches your goal:
+          </p>
+
+          <div class="h-result-row r-maint">
+            <div class="h-result-em">🟢 Maintenance</div>
+            <div class="h-result-text">
+              <strong style="color:var(--text)">Eat this to maintain your current weight.</strong>
+              This equals your TDEE. If your weight is stable and healthy, aim for this target daily.
+            </div>
+          </div>
+
+          <div class="h-result-row r-loss">
+            <div class="h-result-em">🔻 Fat Loss</div>
+            <div class="h-result-text">
+              <strong style="color:var(--text)">Eat this to lose weight gradually (≈0.5 kg/week).</strong>
+              This is your maintenance minus 500 calories. A 500 cal/day deficit creates roughly a 3,500 cal/week deficit — equivalent to ~0.45 kg of fat.
+            </div>
+          </div>
+
+          <div class="h-result-row r-gain">
+            <div class="h-result-em">🔺 Muscle Gain</div>
+            <div class="h-result-text">
+              <strong style="color:var(--text)">Eat this to support muscle growth (lean bulk).</strong>
+              This is your maintenance plus 300 calories — a modest surplus that supports muscle building while minimising excess fat gain.
+            </div>
+          </div>
+
+          <div class="h-divider"></div>
+
+          <p style="font-size:.88rem; font-weight:700; color:var(--text); margin-bottom:8px;">📏 BMI Results</p>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
+            <div style="padding:8px 12px; background:var(--blue-pale); border-radius:var(--radius-xs); font-size:.82rem;">
+              <div style="font-weight:700; color:var(--navy);">Underweight &lt;18.5</div>
+              <div style="color:var(--muted);">May need to increase calorie intake and see a doctor.</div>
+            </div>
+            <div style="padding:8px 12px; background:var(--green-pale); border-radius:var(--radius-xs); font-size:.82rem;">
+              <div style="font-weight:700; color:var(--green);">Normal 18.5–24.9</div>
+              <div style="color:var(--muted);">Healthy weight range. Focus on maintenance and fitness.</div>
+            </div>
+            <div style="padding:8px 12px; background:var(--gold-pale); border-radius:var(--radius-xs); font-size:.82rem;">
+              <div style="font-weight:700; color:var(--gold);">Overweight 25–29.9</div>
+              <div style="color:var(--muted);">AdjBW is used for nutrition calculations in this range.</div>
+            </div>
+            <div style="padding:8px 12px; background:var(--terra-pale); border-radius:var(--radius-xs); font-size:.82rem;">
+              <div style="font-weight:700; color:var(--terra);">Obese ≥30</div>
+              <div style="color:var(--muted);">Strongly recommended: consult a healthcare provider.</div>
+            </div>
+          </div>
+
+          <p style="font-size:.88rem; font-weight:700; color:var(--text); margin-bottom:8px;">🥗 Macronutrient Targets</p>
+          <div style="font-size:.85rem; color:var(--muted); line-height:1.7; margin-bottom:12px;">
+            The protein and fat targets are set per kilogram of body weight. The remaining calories after protein and fat are allocated to carbohydrates, which fuel exercise and brain function.<br/><br/>
+            <strong style="color:var(--text)">Protein</strong> — builds muscle, repairs tissue, keeps you full.<br/>
+            <strong style="color:var(--text)">Fat</strong> — supports hormones, vitamin absorption, and brain health.<br/>
+            <strong style="color:var(--text)">Carbohydrates</strong> — primary energy source; especially important around workouts.
+          </div>
+
+          <div class="h-disclaimer">
+            <div class="h-disclaimer-icon">⚠️</div>
+            <div>
+              <strong>Important:</strong> All results are <em>estimates</em> based on population-level formulas. Individual needs vary based on genetics, health conditions, medications, and other factors. These results are <strong>not medical advice</strong>. Always consult a registered dietitian or healthcare professional before making significant dietary changes.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div><!-- /hs-results -->
+
+    <!-- ═══════════════════════════════════════
+         SECTION 5 — FEATURES GUIDE
+    ═══════════════════════════════════════ -->
+    <div class="ha-section" id="hs-features" data-search="features dark mode theme imperial metric export image share google sheets history save">
+      <button class="ha-btn" onclick="toggleHelp(this)">
+        <div class="ha-icon"><span>⚙️</span></div>
+        <div class="ha-label">App Features &amp; Controls</div>
+        <div class="ha-chevron">▼</div>
+      </button>
+      <div class="ha-body">
+        <div class="ha-inner">
+
+          <div class="h-def">
+            <div class="h-def-term"><span class="h-def-icon">🌙</span> Dark / Light Mode</div>
+            <div class="h-def-desc">Click the <strong>🌙 moon icon</strong> in the top-right to switch between dark and light themes. Your preference is automatically saved.</div>
+          </div>
+
+          <div class="h-def">
+            <div class="h-def-term"><span class="h-def-icon">📏</span> Metric / Imperial Toggle</div>
+            <div class="h-def-desc">Use the <strong>cm / ft &amp; in</strong> toggle beneath the header to switch your height unit. Weight always uses kilograms. All formulas automatically convert to the correct values.</div>
+          </div>
+
+          <div class="h-def">
+            <div class="h-def-term"><span class="h-def-icon">⚡</span> Live Preview Bar</div>
+            <div class="h-def-desc">As you type your details, a green preview bar will appear showing your approximate BMR, TDEE, and BMI in real time — before you press Calculate.</div>
+          </div>
+
+          <div class="h-def">
+            <div class="h-def-term"><span class="h-def-icon">📸</span> Save as Image</div>
+            <div class="h-def-desc">Click <strong>Save as Image</strong> in the Export &amp; Share section after calculating to download an SVG summary card with all your key metrics.</div>
+          </div>
+
+          <div class="h-def">
+            <div class="h-def-term"><span class="h-def-icon">🔗</span> Share Results</div>
+            <div class="h-def-desc">Click <strong>Share Results</strong> to open your device's native share sheet (on mobile) or copy a formatted text summary to your clipboard.</div>
+          </div>
+
+          <div class="h-def">
+            <div class="h-def-term"><span class="h-def-icon">☁️</span> Google Sheets Sync</div>
+            <div class="h-def-desc">Results are automatically sent to a connected Google Sheets spreadsheet each time you calculate. Ask your administrator for the setup instructions if this feature is not yet configured.</div>
+          </div>
+
+          <div class="h-def">
+            <div class="h-def-term"><span class="h-def-icon">📋</span> Calculation History</div>
+            <div class="h-def-desc">Click the <strong>📋 history icon</strong> in the header to view your last 15 calculations stored in this browser. Click <em>Clear History</em> to remove all saved records.</div>
+          </div>
+
+        </div>
+      </div>
+    </div><!-- /hs-features -->
+
+  </div><!-- /hp-body -->
+
+  <!-- Panel footer -->
+  <div class="hp-footer">
+    <div class="hp-footer-note">
+      <strong>NutriCalc Pro</strong><br/>
+      For educational use only. Not medical advice.
+    </div>
+    <button class="hp-close-btn" onclick="closeHelp()">✕ Close Guide</button>
+  </div>
+
+</div><!-- /#help-panel -->
+
+<!-- TOAST — FIX #37 -->
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════════════════════ -->
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   CONFIGURATION — paste your deployed Google Apps Script URL here
+   FIX #16: WARNING — This URL is visible in client-side source.
+   Your Apps Script endpoint is unauthenticated. Treat the connected
+   spreadsheet as semi-public. Add server-side validation in doPost().
+════════════════════════════════════════════════════════════════ */
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyjcStVpNu0EXkrqG8dNOLkk0j7Q2WUtKnNR0NVon4fqVK95safQh86jy1z1x74slkRUA/exec";
+
+/* ═══════════════════════════════════════════════════════════════
+   APP STATE
+════════════════════════════════════════════════════════════════ */
+const S = {
+  unit       : "metric",   // "metric" | "imperial"
+  weightUnit : "kg",       // "kg" | "lbs"  FIX #6
+  sex        : "male",
+  results    : null,
+  history    : [],
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   NAMED CONSTANTS — FIX #32
+════════════════════════════════════════════════════════════════ */
+const KCAL_PER_PROTEIN = 4;
+const KCAL_PER_FAT     = 9;
+const KCAL_PER_CARB    = 4;
+const LBS_PER_KG       = 2.2046;
+const DEFICIT_LOSS     = 500;
+const SURPLUS_GAIN     = 300;
+const ADJBW_FACTOR     = 0.25;
+
+/* ═══════════════════════════════════════════════════════════════
+   SHARED BMR HELPER — FIX #31
+════════════════════════════════════════════════════════════════ */
+function computeBMR(weightKg, hCm, age, sex) {
+  const base = (10 * weightKg) + (6.25 * hCm) - (5 * age);
+  return base + (sex === "male" ? 5 : -161);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   XSS ESCAPE HELPER — FIX #15
+════════════════════════════════════════════════════════════════ */
+function esc(s) {
+  return String(s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATION FRAME REGISTRY — FIX #28
+════════════════════════════════════════════════════════════════ */
+const animFrames = {};
+
+/* Debounce timers — FIX #13, #26 */
+let previewTimer  = null;
+let syncResetTimer = null;
+
+/* ═══════════════════════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════════════════════════ */
+window.addEventListener("DOMContentLoaded", () => {
+  loadStorage();
+
+  // Live preview listeners
+  ["i-age","i-height-cm","i-height-ft","i-height-in","i-weight","i-activity"]
+    .forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener("input", livePreview);
+    });
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   UNIT TOGGLE
+════════════════════════════════════════════════════════════════ */
+function setUnit(u) {
+  S.unit = u;
+  document.getElementById("uMetric").classList.toggle("active", u === "metric");
+  document.getElementById("uImperial").classList.toggle("active", u === "imperial");
+  document.getElementById("h-cm-group").style.display  = u === "metric"   ? "" : "none";
+  document.getElementById("h-ft-group").style.display  = u === "imperial" ? "" : "none";
+  saveStorage();
+  livePreview();
+}
+
+/* FIX #6: Weight unit toggle — convert lbs to kg internally */
+function setWeightUnit(wu) {
+  S.weightUnit = wu;
+  document.getElementById("wKg").classList.toggle("active", wu === "kg");
+  document.getElementById("wLbs").classList.toggle("active", wu === "lbs");
+  document.getElementById("weight-suffix").textContent = wu;
+  const hint = document.getElementById("weight-convert-hint");
+  if (wu === "lbs") {
+    hint.style.display = "";
+    document.getElementById("i-weight").placeholder = "155";
+    document.getElementById("i-weight").min = "44";
+    document.getElementById("i-weight").max = "1100";
+  } else {
+    hint.style.display = "none";
+    document.getElementById("i-weight").placeholder = "70";
+    document.getElementById("i-weight").min = "20";
+    document.getElementById("i-weight").max = "500";
+  }
+  livePreview();
+}
+
+function getWeightKg() {
+  const raw = parseFloat(document.getElementById("i-weight").value) || 0;
+  return S.weightUnit === "lbs" ? raw / 2.2046 : raw;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SEX TOGGLE
+════════════════════════════════════════════════════════════════ */
+function setSex(sex) {
+  S.sex = sex;
+  const m = document.getElementById("sex-m");
+  const f = document.getElementById("sex-f");
+  m.className = "sex-btn" + (sex === "male"   ? " active-m" : "");
+  f.className = "sex-btn" + (sex === "female" ? " active-f" : "");
+  m.setAttribute("aria-pressed", sex === "male"   ? "true" : "false");   // FIX #17
+  f.setAttribute("aria-pressed", sex === "female" ? "true" : "false");   // FIX #17
+  livePreview();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DARK / LIGHT THEME
+════════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════
+   THREE-DOTS DROPDOWN MENU
+════════════════════════════════════════════════════════════════ */
+function toggleDotsMenu(e) {
+  e.stopPropagation();
+  const menu = document.getElementById("dotsMenu");
+  const btn  = document.getElementById("dotsBtn");
+  const open = menu.classList.toggle("open");
+  btn.classList.toggle("open", open);
+}
+// Close dropdown when clicking outside
+document.addEventListener("click", () => {
+  document.getElementById("dotsMenu").classList.remove("open");
+  document.getElementById("dotsBtn").classList.remove("open");
+});
+
+function dotsTheme() {
+  const dark = document.documentElement.getAttribute("data-theme") === "dark";
+  document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+  document.getElementById("dotsThemeIcon").textContent  = dark ? "🌙" : "☀️";
+  document.getElementById("dotsThemeLabel").textContent = dark ? "Dark Mode" : "Light Mode";
+  localStorage.setItem("nc-theme", dark ? "light" : "dark");
+  // close menu after action
+  document.getElementById("dotsMenu").classList.remove("open");
+  document.getElementById("dotsBtn").classList.remove("open");
+}
+
+function dotsHelp() {
+  document.getElementById("dotsMenu").classList.remove("open");
+  document.getElementById("dotsBtn").classList.remove("open");
+  openHelp();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HISTORY ACCORDION TOGGLE
+════════════════════════════════════════════════════════════════ */
+function toggleHistAccordion() {
+  document.getElementById("hist-card").classList.toggle("h-open");
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HELPER — get height in cm from inputs
+════════════════════════════════════════════════════════════════ */
+function getHeightCm() {
+  if (S.unit === "metric") {
+    return parseFloat(document.getElementById("i-height-cm").value) || 0;
+  } else {
+    const ft = parseFloat(document.getElementById("i-height-ft").value) || 0;
+    const inches = parseFloat(document.getElementById("i-height-in").value) || 0;
+    return (ft * 30.48) + (inches * 2.54);
+  }
+}
+
+/* Total height in inches (for DBW) */
+function getTotalInches() {
+  if (S.unit === "metric") {
+    const cm = parseFloat(document.getElementById("i-height-cm").value) || 0;
+    return cm / 2.54;
+  } else {
+    const ft  = parseFloat(document.getElementById("i-height-ft").value) || 0;
+    const ins = parseFloat(document.getElementById("i-height-in").value) || 0;
+    return (ft * 12) + ins;
+  }
+}
+
+/* Height display string */
+function heightDisplay() {
+  if (S.unit === "imperial") {
+    const ft  = document.getElementById("i-height-ft").value  || "0";
+    const ins = document.getElementById("i-height-in").value  || "0";
+    return `${ft}ft ${ins}in`;
+  }
+  return document.getElementById("i-height-cm").value + " cm";
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LIVE PREVIEW
+════════════════════════════════════════════════════════════════ */
+function livePreview() {
+  clearTimeout(previewTimer);                         // FIX #13: debounce
+  previewTimer = setTimeout(_livePreview, 320);
+}
+function _livePreview() {
+  const age    = parseFloat(document.getElementById("i-age").value);
+  const weightKg = getWeightKg();   // FIX #6
+  const hCm    = getHeightCm();
+  const actMul = parseFloat(document.getElementById("i-activity").value);
+  const bar    = document.getElementById("preview-bar");
+
+  if (!age || !weightKg || !hCm) { bar.classList.remove("show"); return; }
+  if (weightKg < 20 || weightKg > 500 || hCm < 50 || hCm > 280) { bar.classList.remove("show"); return; } // FIX #4 #5
+
+  const bmr  = computeBMR(weightKg, hCm, age, S.sex);   // FIX #31
+  const tdee = bmr * actMul;
+  const hM   = hCm / 100;
+  const bmi  = weightKg / (hM * hM);
+
+  document.getElementById("pb-bmr").textContent  = Math.round(bmr);
+  document.getElementById("pb-tdee").textContent = Math.round(tdee);
+  document.getElementById("pb-bmi").textContent  = bmi.toFixed(1);
+  bar.classList.add("show");
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MAIN CALCULATE
+════════════════════════════════════════════════════════════════ */
+function calculateAll() {
+  /* ── Gather inputs ── */
+  const name     = document.getElementById("i-name").value.trim() || "Patient";
+  const weightKg = getWeightKg();   // FIX #6: converts lbs→kg if needed
+  const hCm      = getHeightCm();
+  const totalIn  = getTotalInches();
+  const actMul   = parseFloat(document.getElementById("i-activity").value);
+  const actLabel = document.getElementById("i-activity")
+                     .options[document.getElementById("i-activity").selectedIndex].text;
+  const sex      = S.sex;
+
+  /* ── Validation — FIX #4, #5, #9, #23 ── */
+  const age = Math.floor(parseFloat(document.getElementById("i-age").value));
+  if (!age || !weightKg || !hCm) {
+    toast("⚠️ Please enter Age, Height, and Weight.", "err"); return;
+  }
+  if (age < 10 || age > 120) { toast("⚠️ Enter a valid age (10–120).", "err"); return; }
+  if (weightKg < 20 || weightKg > 500) { toast("⚠️ Weight must be between " + (S.weightUnit === "lbs" ? "44–1100 lbs" : "20–500 kg") + ".", "err"); return; }  // FIX #4
+  if (hCm < 50 || hCm > 280) { toast("⚠️ Please enter a valid height (50–280 cm).", "err"); return; }         // FIX #5
+  if (S.unit === "imperial") {
+    const insVal = parseFloat(document.getElementById("i-height-in").value) || 0;
+    if (insVal < 0 || insVal > 11) { toast("⚠️ Inches must be between 0 and 11.", "err"); return; }           // FIX #9
+  }
+
+  /* ══════════════════════════════════════════
+     1. BMR — Mifflin–St Jeor (FIX #31: shared helper)
+  ══════════════════════════════════════════ */
+  const bmrBase = (10 * weightKg) + (6.25 * hCm) - (5 * age);
+  const bmrAdj  = sex === "male" ? 5 : -161;
+  const bmr     = computeBMR(weightKg, hCm, age, sex);
+
+  /* ══════════════════════════════════════════
+     2. TDEE
+  ══════════════════════════════════════════ */
+  const tdee        = bmr * actMul;
+  const maintenance = Math.round(tdee);
+  const minSafeCal  = sex === "female" ? 1200 : 1500;             // FIX #3: safe floor
+  const fatLossRaw  = Math.round(tdee - DEFICIT_LOSS);
+  const fatLossFloorApplied = fatLossRaw < minSafeCal;
+  const fatLoss     = fatLossFloorApplied ? minSafeCal : fatLossRaw;
+  const muscleGain  = Math.round(tdee + SURPLUS_GAIN);
+
+  /* ══════════════════════════════════════════
+     3. BMI
+  ══════════════════════════════════════════ */
+  const hM  = hCm / 100;
+  const bmi = weightKg / (hM * hM);
+  let bmiCat, bmiClass;
+  if      (bmi < 18.5) { bmiCat = "Underweight"; bmiClass = "uw"; }
+  else if (bmi < 25)   { bmiCat = "Normal";       bmiClass = "nw"; }
+  else if (bmi < 30)   { bmiCat = "Overweight";   bmiClass = "ow"; }
+  else                 { bmiCat = "Obese";         bmiClass = "ob"; }
+
+  /* ══════════════════════════════════════════
+     4. DBW — NDAP Formula
+     Base 5ft = 60 inches
+  ══════════════════════════════════════════ */
+  const baseLbs  = sex === "male" ? 112 : 105;
+  const inchesOver5ft = totalIn - 60;               // negative if under 5ft
+  const dbwLbs   = baseLbs + (4 * inchesOver5ft);   // works for under 5ft too (subtracts)
+  const dbwKg    = dbwLbs / 2.2046;   // FIX #1: precise lbs→kg factor
+
+  /* ══════════════════════════════════════════
+     5. AdjBW
+  ══════════════════════════════════════════ */
+  const abw    = weightKg;
+  const adjBw  = dbwKg + ADJBW_FACTOR * (abw - dbwKg);
+
+  /* ══════════════════════════════════════════
+     6. Macros
+     FIX #2: Use weight appropriate to BMI category
+     - Underweight → use DBW (avoid over-restricting already-thin people)
+     - Normal      → use actual weight
+     - Overweight/Obese → use AdjBW (clinically appropriate for excess fat)
+  ══════════════════════════════════════════ */
+  const weightForMacros = bmi >= 25 ? adjBw : (bmi < 18.5 ? dbwKg : weightKg);
+  const proteinRatio = actMul <= 1.2 ? 1.0 : actMul <= 1.375 ? 1.4 : actMul <= 1.55 ? 1.6 : 2.0; // FIX #21: activity-tiered protein
+  const protG     = Math.round(weightForMacros * proteinRatio);
+  const fatG      = Math.round(weightForMacros * 0.8);
+  const protKcal  = protG * KCAL_PER_PROTEIN;
+  const fatKcal   = fatG * KCAL_PER_FAT;
+  const carbKcal  = Math.max(0, maintenance - protKcal - fatKcal);
+  const carbG     = Math.round(carbKcal / KCAL_PER_CARB);
+  const totalKcal = protKcal + fatKcal + carbKcal;
+  const protPct   = Math.round((protKcal / totalKcal) * 100);
+  const fatPct    = Math.round((fatKcal  / totalKcal) * 100);
+  const carbPct   = 100 - protPct - fatPct;
+
+  /* ── Store results ── */
+  S.results = {
+    name, age, sex, heightDisplay: heightDisplay(), heightCm: hCm.toFixed(1),
+    weight: weightKg, totalInches: totalIn, actLabel, actMul,
+    bmr: Math.round(bmr), bmrBase: bmrBase.toFixed(1), bmrAdj,
+    tdee: maintenance, fatLoss, muscleGain,
+    fatLossFloorApplied, minSafeCal,
+    bmi: bmi.toFixed(1), bmiCat, bmiClass,
+    dbwLbs: dbwLbs.toFixed(1), dbwKg: dbwKg.toFixed(1),
+    inchesOver5ft: inchesOver5ft.toFixed(1),
+    adjBw: adjBw.toFixed(1),
+    weightForMacros: weightForMacros.toFixed(1), proteinRatio,
+    protG, fatG, carbG, protKcal, fatKcal, carbKcal,
+    protPct, fatPct, carbPct,
+  };
+
+  /* ── Render results ── */
+  renderResults();
+  renderSteps();
+
+  /* ── Reveal panel ── */
+  const rw = document.getElementById("results-wrap");
+  rw.classList.add("revealed");
+  setTimeout(() => rw.scrollIntoView({ behavior:"smooth", block:"start" }), 120);
+
+  /* ── Save history ── */
+  S.history.unshift({ ts: new Date().toLocaleString(), ...S.results });
+  if (S.history.length > 15) S.history.pop();
+  saveStorage();
+  renderHistory();
+
+  /* ── Auto-sync — FIX #19: only if URL configured ── */
+  if (GOOGLE_SCRIPT_URL !== "YOUR_GOOGLE_SCRIPT_URL_HERE") syncSheets(true);
+
+  toast("✅ Calculation complete!", "ok");
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RENDER RESULTS
+════════════════════════════════════════════════════════════════ */
+function renderResults() {
+  const r = S.results;
+
+  /* Calories */
+  countUp("r-maint", r.tdee);
+  countUp("r-bmr",   r.bmr);
+  countUp("r-loss",  r.fatLoss);
+  countUp("r-gain",  r.muscleGain);
+
+  /* BMI — FIX #7: extreme value warning, FIX #12: scale 10–45 */
+  document.getElementById("r-bmi").textContent = r.bmi;
+  const badge = document.getElementById("r-bmi-badge");
+  badge.textContent = r.bmiCat;
+  badge.className = "bmi-badge " + r.bmiClass;
+  const bmiNum = parseFloat(r.bmi);
+  const pct = Math.min(100, Math.max(0, ((bmiNum - 10) / 35) * 100)); // FIX #12: range 10-45
+  document.getElementById("bmi-track-el").setAttribute("aria-label", `BMI indicator: ${r.bmi}, ${r.bmiCat}`); // FIX #37
+  document.getElementById("bmi-pin").style.left = pct + "%";
+  // FIX #7: cross-field sanity warning
+  const bmiWarn = document.getElementById("bmi-extreme-warn");
+  if (bmiNum > 60 || bmiNum < 12) {
+    bmiWarn.style.display = "";
+    bmiWarn.textContent = "⚠️ Unusual BMI (" + r.bmi + "). Please verify your inputs are correct.";
+  } else {
+    bmiWarn.style.display = "none";
+  }
+
+  /* DBW / AdjBW — FIX #10: show AdjBW only when overweight */
+  document.getElementById("r-dbw").textContent     = r.dbwKg + " kg";
+  document.getElementById("r-dbw-sub").textContent = `(${r.dbwLbs} lbs)`;
+  const adjbwTile = document.getElementById("adjbw-tile");
+  if (bmiNum >= 25) {
+    adjbwTile.style.opacity = "1";
+    document.getElementById("r-adjbw").textContent = r.adjBw + " kg";
+    document.getElementById("r-adjbw-sub").textContent = "kg (applied to your macros)";
+  } else {
+    adjbwTile.style.opacity = "0.4";
+    document.getElementById("r-adjbw").textContent = "N/A";
+    document.getElementById("r-adjbw-sub").textContent = "Not applicable (BMI < 25)";
+  }
+
+  /* Fat loss floor note — FIX #3 */
+  const floorNote = document.getElementById("fat-loss-floor-note");
+  if (r.fatLossFloorApplied) {
+    floorNote.style.display = "";
+    floorNote.textContent = `⚠️ Minimum safe threshold applied (${r.minSafeCal} kcal). A larger deficit would be unsafe.`;
+  } else {
+    floorNote.style.display = "none";
+  }
+
+  /* Macros */
+  document.getElementById("r-prot").textContent      = r.protG + "g";
+  document.getElementById("r-prot-kcal").textContent = r.protKcal + " kcal";
+  document.getElementById("r-prot-pct").textContent  = r.protPct + "%";
+  document.getElementById("r-fat").textContent       = r.fatG + "g";
+  document.getElementById("r-fat-kcal").textContent  = r.fatKcal + " kcal";
+  document.getElementById("r-fat-pct").textContent   = r.fatPct + "%";
+  document.getElementById("r-carb").textContent      = r.carbG + "g";
+  document.getElementById("r-carb-kcal").textContent = r.carbKcal + " kcal";
+  document.getElementById("r-carb-pct").textContent  = r.carbPct + "%";
+
+  /* Macro bar */
+  document.getElementById("mseg-p").style.width = r.protPct + "%";
+  document.getElementById("mseg-f").style.width = r.fatPct  + "%";
+  document.getElementById("mseg-c").style.width = r.carbPct + "%";
+  document.getElementById("mbl-p").textContent = `Protein ${r.protPct}%`;
+  document.getElementById("mbl-f").textContent = `Fat ${r.fatPct}%`;
+  document.getElementById("mbl-c").textContent = `Carbs ${r.carbPct}%`;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   COUNT-UP ANIMATION
+════════════════════════════════════════════════════════════════ */
+function countUp(id, target) {
+  const el = document.getElementById(id);
+  if (animFrames[id]) cancelAnimationFrame(animFrames[id]); // FIX #28
+  const dur = 700, start = performance.now();
+  const step = (now) => {
+    const p = Math.min((now - start) / dur, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(e * target);
+    if (p < 1) animFrames[id] = requestAnimationFrame(step);
+    else delete animFrames[id];
+  };
+  animFrames[id] = requestAnimationFrame(step);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RENDER STEP-BY-STEP CONTENT
+════════════════════════════════════════════════════════════════ */
+function renderSteps() {
+  const r = S.results;
+  // FIX #15: escape all user-derived values used in innerHTML
+  const rName = esc(r.name);
+  const rSex  = esc(r.sex);
+  const rAge  = esc(String(r.age));
+  const rW    = esc(String(r.weight));
+  const rHcm  = esc(String(r.heightCm));
+  const rHdisp = esc(r.heightDisplay);
+  const rActLabel = esc(r.actLabel);
+
+  const sexConst = r.sex === "male" ? "+ 5" : "− 161";
+  const sexNote  = r.sex === "male" ? "Male: +5" : "Female: −161";
+  const hM = (r.heightCm / 100).toFixed(2);
+  const hMsq = (Math.pow(r.heightCm / 100, 2)).toFixed(4);
+  const baseLbs = r.sex === "male" ? 112 : 105;
+  const baseFormula = r.sex === "male"
+    ? "DBW = 112 + (4 × inches over 5ft)" : "DBW = 105 + (4 × inches over 5ft)";
+
+  /* ─ BMR & TDEE steps ─ */
+  document.getElementById("steps-bmr").innerHTML = `
+<div class="step-block">
+  <div class="step-num-row"><div class="sn-badge">1</div><div class="sn-title">Mifflin–St Jeor Formula</div></div>
+  <div class="math-block">Formula (${r.sex === "male" ? "Male" : "Female"}):
+BMR = (10 × weight) + (6.25 × height_cm) − (5 × age) <span class="hlt">${sexConst}</span>
+
+Substituting values:
+BMR = (10 × <span class="hl">${rW}</span>) + (6.25 × <span class="hl">${rHcm}</span>) − (5 × <span class="hl">${rAge}</span>) <span class="hlt">${sexConst}</span>
+BMR = ${(10 * r.weight).toFixed(1)} + ${(6.25 * r.heightCm).toFixed(1)} − ${(5 * r.age)} <span class="hlt">${sexConst}</span>
+BMR = <span class="hlg">${r.bmrBase}</span> ${r.bmrAdj >= 0 ? "+ " + r.bmrAdj : "− " + Math.abs(r.bmrAdj)} = <span class="hl">${r.bmr} cal/day</span></div>
+</div>
+<div class="step-block">
+  <div class="step-num-row"><div class="sn-badge">2</div><div class="sn-title">TDEE — Activity Multiplier</div></div>
+  <div class="math-block">Formula: TDEE = BMR × Activity Multiplier
+
+Activity level: ${esc(r.actLabel.split("—")[0].trim())} → multiplier = <span class="hlt">${r.actMul}</span>
+TDEE = ${r.bmr} × ${r.actMul}
+TDEE = <span class="hl">${r.tdee} cal/day</span>  ← Maintenance
+
+Fat Loss  = ${r.tdee} − ${DEFICIT_LOSS} = <span class="hlt">${r.fatLoss} cal/day</span>${r.fatLossFloorApplied ? ' ⚠️ (floor applied: min ' + r.minSafeCal + ' kcal)' : ''}
+Muscle Gain = ${r.tdee} + ${SURPLUS_GAIN} = <span class="hln">${r.muscleGain} cal/day</span></div>
+</div>`;
+
+  /* ─ BMI steps ─ */
+  document.getElementById("steps-bmi").innerHTML = `
+<div class="step-block">
+  <div class="step-num-row"><div class="sn-badge">1</div><div class="sn-title">BMI Formula</div></div>
+  <div class="math-block">Formula: BMI = weight(kg) ÷ height(m)²
+
+Convert height: ${rHcm} cm ÷ 100 = <span class="hl">${hM} m</span>
+
+BMI = ${rW} ÷ (${hM})²
+BMI = ${rW} ÷ ${hMsq}
+BMI = <span class="hl">${r.bmi}</span>  → Category: <span class="hlt">${r.bmiCat}</span>
+
+Scale reference:
+  &lt; 18.5  = Underweight
+  18.5–24.9 = Normal weight  ✓
+  25–29.9   = Overweight
+  ≥ 30      = Obese</div>
+</div>`;
+
+  /* ─ DBW / AdjBW steps ─ */
+  const over5ftAbs = Math.abs(parseFloat(r.inchesOver5ft));
+  const over5ftSign = parseFloat(r.inchesOver5ft) >= 0 ? "over" : "under";
+  document.getElementById("steps-dbw").innerHTML = `
+<div class="step-block">
+  <div class="step-num-row"><div class="sn-badge">1</div><div class="sn-title">Desirable Body Weight (Hamwi Formula)</div></div>
+  <div class="math-block">Patient: ${r.sex === "male" ? "Male" : "Female"}, height = ${rHdisp}
+Total height = <span class="hl">${r.totalInches.toFixed(1)} inches</span>
+Base (5ft = 60 in) → patient is <span class="hlt">${over5ftAbs.toFixed(1)} inches</span> ${over5ftSign} 5ft
+
+Formula (${r.sex === "male" ? "Male" : "Female"}): <span class="hl">${baseFormula}</span>
+DBW = ${baseLbs} + (4 × <span class="hlt">${parseFloat(r.inchesOver5ft).toFixed(1)}</span>)
+DBW = ${baseLbs} + ${(4 * parseFloat(r.inchesOver5ft)).toFixed(1)}
+DBW = <span class="hl">${r.dbwLbs} lbs</span>
+
+Convert to kg: ${r.dbwLbs} ÷ 2.2046 = <span class="hlg">${r.dbwKg} kg</span></div>
+</div>
+<div class="step-block">
+  <div class="step-num-row"><div class="sn-badge">2</div><div class="sn-title">Adjusted Body Weight (AdjBW)</div></div>
+  <div class="math-block">Formula: AdjBW = DBW + 0.25(ABW − DBW)
+  (Applied when BMI ≥ 25; ABW = Actual Body Weight)
+
+ABW = <span class="hlt">${rW} kg</span>
+DBW = <span class="hl">${r.dbwKg} kg</span>
+
+AdjBW = ${r.dbwKg} + 0.25(${rW} − ${r.dbwKg})
+AdjBW = ${r.dbwKg} + 0.25 × ${(r.weight - parseFloat(r.dbwKg)).toFixed(1)}
+AdjBW = ${r.dbwKg} + ${(0.25 * (r.weight - parseFloat(r.dbwKg))).toFixed(1)}
+AdjBW = <span class="hlg">${r.adjBw} kg</span>
+${parseFloat(r.bmi) < 25 ? "Note: AdjBW is N/A at your BMI — actual weight is used for macros." : "AdjBW is used for macro calculations (BMI ≥ 25)."}</div>
+</div>`;
+
+  /* ─ Macro steps — FIX #35: show weight basis and protein ratio ─ */
+  const macroWeightLabel = parseFloat(r.bmi) >= 25 ? `AdjBW (${r.adjBw} kg) — overweight adjustment` :
+                           parseFloat(r.bmi) < 18.5 ? `DBW (${r.dbwKg} kg) — underweight adjustment` :
+                           `Actual weight (${rW} kg)`;
+  document.getElementById("steps-macro").innerHTML = `
+<div class="step-block">
+  <div class="step-num-row"><div class="sn-badge">1</div><div class="sn-title">Protein</div></div>
+  <div class="math-block">Weight used for macros: <span class="hl">${macroWeightLabel}</span>
+Protein ratio (activity-adjusted): <span class="hlt">${r.proteinRatio} g/kg</span>
+
+Formula: Protein = weight × ${r.proteinRatio} g/kg
+Protein = ${r.weightForMacros} × ${r.proteinRatio} = <span class="hl">${r.protG} g</span>  (${r.protKcal} kcal @ ${KCAL_PER_PROTEIN} kcal/g)
+Note: macros are based on maintenance calories. Adjust proportionally for fat loss/muscle gain.</div>
+</div>
+<div class="step-block">
+  <div class="step-num-row"><div class="sn-badge">2</div><div class="sn-title">Fat</div></div>
+  <div class="math-block">Formula: Fat = weight × 0.8 g/kg
+Fat = ${r.weightForMacros} × 0.8 = <span class="hlg">${r.fatG} g</span>  (${r.fatKcal} kcal @ ${KCAL_PER_FAT} kcal/g)</div>
+</div>
+<div class="step-block">
+  <div class="step-num-row"><div class="sn-badge">3</div><div class="sn-title">Carbohydrates (remaining calories)</div></div>
+  <div class="math-block">Formula: Carb kcal = Maintenance − Protein kcal − Fat kcal
+Carb kcal = ${r.tdee} − ${r.protKcal} − ${r.fatKcal}
+Carb kcal = <span class="hlt">${r.carbKcal}</span>  ÷ ${KCAL_PER_CARB} kcal/g = <span class="hlt">${r.carbG} g</span>
+
+Summary:
+  Protein: ${r.protG}g  (${r.protKcal} kcal, ${r.protPct}%)
+  Fat:     ${r.fatG}g  (${r.fatKcal} kcal, ${r.fatPct}%)
+  Carbs:   ${r.carbG}g  (${r.carbKcal} kcal, ${r.carbPct}%)</div>
+</div>`;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ACCORDION
+════════════════════════════════════════════════════════════════ */
+function toggleAcc(btn) {
+  const body = btn.nextElementSibling;
+  const open = btn.classList.toggle("open");
+  body.classList.toggle("open", open);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESET
+════════════════════════════════════════════════════════════════ */
+function resetAll() {
+  ["i-name","i-age","i-height-cm","i-height-ft","i-height-in","i-weight"]
+    .forEach(id => { document.getElementById(id).value = ""; });
+  document.getElementById("i-activity").value = "1.375";   // FIX #22: match new default
+  setSex("male");
+  setUnit("metric");         // FIX #27: restore default unit
+  setWeightUnit("kg");       // FIX #27: restore default weight unit
+  document.getElementById("results-wrap").classList.remove("revealed");
+  document.getElementById("preview-bar").classList.remove("show");
+  S.results = null;
+  toast("↺ Form reset.", "inf");
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GOOGLE SHEETS SYNC
+════════════════════════════════════════════════════════════════ */
+async function syncSheets(silent = false) {
+  if (!S.results) { toast("⚠️ Run a calculation first.", "err"); return; }
+  if (GOOGLE_SCRIPT_URL === "YOUR_GOOGLE_SCRIPT_URL_HERE") {
+    if (!silent) toast("⚠️ Add your Google Apps Script URL in the code.", "err");
+    return;
+  }
+  const r = S.results;
+  const payload = {
+    name: r.name, age: r.age, sex: r.sex,
+    height: r.heightCm + " cm", weight: r.weight,
+    activity: r.actLabel,
+    bmr: r.bmr, tdee: r.tdee,
+    bmi: r.bmi, bmiCategory: r.bmiCat,
+    dbw: r.dbwKg, adjbw: r.adjBw,
+    maintenance: r.tdee, fatLoss: r.fatLoss, muscleGain: r.muscleGain,
+    protein: r.protG, fat: r.fatG, carbs: r.carbG,
+  };
+  document.getElementById("syncBtn").textContent = "⏳ Syncing…";
+  clearTimeout(syncResetTimer); // FIX #26
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST", mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    toast("☁️ Saved to Google Sheets!", "ok");
+    document.getElementById("syncBtn").textContent = "✅ Synced!";
+    syncResetTimer = setTimeout(() => { document.getElementById("syncBtn").textContent = "☁️ Sync to Google Sheets"; }, 3000); // FIX #26
+  } catch {
+    toast("❌ Sync failed — check the URL.", "err");
+    document.getElementById("syncBtn").textContent = "☁️ Sync to Google Sheets";
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   EXPORT AS SVG IMAGE
+════════════════════════════════════════════════════════════════ */
+function exportSVG() {
+  if (!S.results) { toast("⚠️ Run a calculation first.", "err"); return; }
+  const r = S.results;
+  // FIX #34: truncate long names for SVG layout
+  const displayName = r.name.length > 30 ? r.name.slice(0, 27) + "…" : r.name;
+  // FIX #33: SVG always exports in light theme (ideal for printing/sharing)
+  toast("📸 Saving as light-theme image card…", "inf");
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="520" height="380">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f5f0e8"/>
+      <stop offset="100%" stop-color="#e4dccc"/>
+    </linearGradient>
+  </defs>
+  <rect width="520" height="380" fill="url(#bg)" rx="18"/>
+  <rect x="1" y="1" width="518" height="378" fill="none" stroke="#d5cbb8" stroke-width="2" rx="17"/>
+  <!-- Header -->
+  <rect x="0" y="0" width="520" height="64" fill="#2d6a4f" rx="17"/>
+  <rect x="0" y="48" width="520" height="16" fill="#2d6a4f"/>
+  <text x="30" y="26" fill="#d8f3dc" font-size="11" font-family="Georgia" font-weight="700" letter-spacing="2">🌿 NUTRICALC PRO</text>
+  <text x="30" y="48" fill="white" font-size="18" font-family="Georgia" font-weight="700">${displayName}  ·  ${r.sex.charAt(0).toUpperCase()+r.sex.slice(1)}, ${r.age}yrs  ·  ${r.heightDisplay}  ·  ${r.weight.toFixed(1)}kg</text>
+  <!-- Calories -->
+  <text x="30" y="100" fill="#7a7260" font-size="10" font-family="Georgia" font-weight="700" letter-spacing="1.5">CALORIE NEEDS</text>
+  <rect x="30" y="108" width="110" height="64" fill="#d8f3dc" rx="10"/>
+  <text x="85" y="128" fill="#2d6a4f" font-size="9" font-family="Arial" text-anchor="middle">MAINTENANCE</text>
+  <text x="85" y="155" fill="#1c1a15" font-size="26" font-family="Georgia" font-weight="900" text-anchor="middle">${r.tdee}</text>
+  <text x="85" y="167" fill="#7a7260" font-size="8" font-family="Arial" text-anchor="middle">cal/day</text>
+  <rect x="152" y="108" width="110" height="64" fill="#fde8e0" rx="10"/>
+  <text x="207" y="128" fill="#c1440e" font-size="9" font-family="Arial" text-anchor="middle">FAT LOSS</text>
+  <text x="207" y="155" fill="#1c1a15" font-size="26" font-family="Georgia" font-weight="900" text-anchor="middle">${r.fatLoss}</text>
+  <text x="207" y="167" fill="#7a7260" font-size="8" font-family="Arial" text-anchor="middle">cal/day</text>
+  <rect x="274" y="108" width="110" height="64" fill="#d6e8f9" rx="10"/>
+  <text x="329" y="128" fill="#1d3557" font-size="9" font-family="Arial" text-anchor="middle">MUSCLE GAIN</text>
+  <text x="329" y="155" fill="#1c1a15" font-size="26" font-family="Georgia" font-weight="900" text-anchor="middle">${r.muscleGain}</text>
+  <text x="329" y="167" fill="#7a7260" font-size="8" font-family="Arial" text-anchor="middle">cal/day</text>
+  <rect x="396" y="108" width="96" height="64" fill="#fdf0d5" rx="10"/>
+  <text x="444" y="128" fill="#c9882c" font-size="9" font-family="Arial" text-anchor="middle">BMR</text>
+  <text x="444" y="155" fill="#1c1a15" font-size="26" font-family="Georgia" font-weight="900" text-anchor="middle">${r.bmr}</text>
+  <text x="444" y="167" fill="#7a7260" font-size="8" font-family="Arial" text-anchor="middle">at rest</text>
+  <!-- Divider -->
+  <line x1="30" y1="192" x2="490" y2="192" stroke="#d5cbb8" stroke-width="1.5"/>
+  <!-- Body Metrics -->
+  <text x="30" y="213" fill="#7a7260" font-size="10" font-family="Georgia" font-weight="700" letter-spacing="1.5">BODY METRICS</text>
+  <text x="30" y="238" fill="#7a7260" font-size="10" font-family="Arial">BMI</text>
+  <text x="30" y="258" fill="#1c1a15" font-size="22" font-family="Georgia" font-weight="700">${r.bmi}</text>
+  <text x="30" y="274" fill="#2d6a4f" font-size="10" font-family="Arial" font-weight="700">${r.bmiCat}</text>
+  <text x="160" y="238" fill="#7a7260" font-size="10" font-family="Arial">DBW</text>
+  <text x="160" y="260" fill="#1c1a15" font-size="20" font-family="Georgia" font-weight="700">${r.dbwKg} kg</text>
+  <text x="160" y="274" fill="#7a7260" font-size="9" font-family="Arial">${r.dbwLbs} lbs</text>
+  <text x="290" y="238" fill="#7a7260" font-size="10" font-family="Arial">AdjBW</text>
+  <text x="290" y="260" fill="#1c1a15" font-size="20" font-family="Georgia" font-weight="700">${r.adjBw} kg</text>
+  <text x="290" y="274" fill="#7a7260" font-size="9" font-family="Arial">if overweight</text>
+  <!-- Macros -->
+  <line x1="30" y1="296" x2="490" y2="296" stroke="#d5cbb8" stroke-width="1.5"/>
+  <text x="30" y="316" fill="#7a7260" font-size="10" font-family="Georgia" font-weight="700" letter-spacing="1.5">MACRONUTRIENTS</text>
+  <text x="30"  y="340" fill="#2d6a4f" font-size="24" font-family="Georgia" font-weight="900">${r.protG}g</text>
+  <text x="30"  y="355" fill="#7a7260" font-size="9" font-family="Arial">Protein (${r.protPct}%)</text>
+  <text x="190" y="340" fill="#c9882c" font-size="24" font-family="Georgia" font-weight="900">${r.fatG}g</text>
+  <text x="190" y="355" fill="#7a7260" font-size="9" font-family="Arial">Fat (${r.fatPct}%)</text>
+  <text x="330" y="340" fill="#c1440e" font-size="24" font-family="Georgia" font-weight="900">${r.carbG}g</text>
+  <text x="330" y="355" fill="#7a7260" font-size="9" font-family="Arial">Carbohydrates (${r.carbPct}%)</text>
+  <text x="490" y="373" fill="#d5cbb8" font-size="9" font-family="Arial" text-anchor="end">NutriCalc Pro</text>
+</svg>`;
+  const blob = new Blob([svg], { type:"image/svg+xml" });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href = url;
+  a.download = `nutri-${displayName.replace(/\s+/g,"-").replace(/[^a-zA-Z0-9-]/g,"")}.svg`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast("📸 Image saved!", "ok");
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SHARE RESULTS
+════════════════════════════════════════════════════════════════ */
+function shareResults() {
+  if (!S.results) { toast("⚠️ Run a calculation first.", "err"); return; }
+  const r = S.results;
+  const text =
+`🌿 NutriCalc Pro Results — ${r.name}
+
+📊 Calorie Targets
+  Maintenance: ${r.tdee} cal/day
+  Fat Loss:    ${r.fatLoss} cal/day
+  Muscle Gain: ${r.muscleGain} cal/day
+  BMR:         ${r.bmr} cal/day
+
+⚖️ Body Metrics
+  BMI: ${r.bmi} (${r.bmiCat})
+  DBW: ${r.dbwKg} kg
+  AdjBW: ${r.adjBw} kg
+
+🥗 Daily Macros
+  Protein: ${r.protG}g | Fat: ${r.fatG}g | Carbs: ${r.carbG}g`;
+
+  if (navigator.share) {
+    navigator.share({ title: "NutriCalc Pro Results", text });
+  } else {
+    navigator.clipboard.writeText(text)
+      .then(() => toast("📋 Copied to clipboard!", "inf"))  // FIX #29
+      .catch(() => toast("⚠️ Could not copy. Please copy manually.", "err"));
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HISTORY
+════════════════════════════════════════════════════════════════ */
+function renderHistory() {
+  const el = document.getElementById("hist-content");
+  if (!S.history.length) {
+    el.innerHTML = '<p class="no-hist">No history yet.</p>'; return;
+  }
+  const rows = S.history.map(h => `<tr>
+    <td>${h.ts}</td><td>${h.name}</td>
+    <td>${h.tdee}</td><td>${h.bmi} (${h.bmiCat})</td>
+    <td>${h.dbwKg}</td><td>${h.adjBw}</td>
+    <td>${h.protG}g / ${h.fatG}g / ${h.carbG}g</td>
+  </tr>`).join("");
+  el.innerHTML = `<div class="hist-wrap"><table class="hist-table">
+    <thead><tr><th>Time</th><th>Name</th><th>TDEE</th><th>BMI</th><th>DBW</th><th>AdjBW</th><th>P/F/C</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table></div>`;
+}
+function clearHist() {
+  S.history = [];
+  localStorage.removeItem("nc-history");
+  renderHistory();
+  toast("🗑️ History cleared.", "inf");
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LOCAL STORAGE
+════════════════════════════════════════════════════════════════ */
+function saveStorage() {
+  const prefs = {
+    unit: S.unit, sex: S.sex,
+    weightUnit: S.weightUnit,       // FIX #6
+    name:     document.getElementById("i-name").value,
+    age:      document.getElementById("i-age").value,
+    heightCm: document.getElementById("i-height-cm").value,
+    heightFt: document.getElementById("i-height-ft").value,
+    heightIn: document.getElementById("i-height-in").value,
+    weight:   document.getElementById("i-weight").value,
+    activity: document.getElementById("i-activity").value,
+  };
+  localStorage.setItem("nc-prefs", JSON.stringify(prefs));
+  localStorage.setItem("nc-history", JSON.stringify(S.history));
+}
+function loadStorage() {
+  // Theme
+  const t = localStorage.getItem("nc-theme");
+  if (t === "dark") {
+    document.documentElement.setAttribute("data-theme", "dark");
+    document.getElementById("dotsThemeIcon").textContent  = "☀️";
+    document.getElementById("dotsThemeLabel").textContent = "Light Mode";
+  }
+  // Prefs
+  try {
+    const p = JSON.parse(localStorage.getItem("nc-prefs"));
+    if (p) {
+      setUnit(p.unit || "metric");
+      setSex(p.sex || "male");
+      if (p.weightUnit) setWeightUnit(p.weightUnit); // FIX #6: restore weight unit
+      if (p.name)     document.getElementById("i-name").value      = p.name;
+      if (p.age)      document.getElementById("i-age").value       = p.age;
+      if (p.heightCm) document.getElementById("i-height-cm").value = p.heightCm;
+      if (p.heightFt) document.getElementById("i-height-ft").value = p.heightFt;
+      if (p.heightIn) document.getElementById("i-height-in").value = p.heightIn;
+      if (p.weight)   document.getElementById("i-weight").value    = p.weight;
+      if (p.activity) document.getElementById("i-activity").value  = p.activity;
+    }
+  } catch(e) { console.warn("[NutriCalc] Prefs parse error:", e); } // FIX #30
+  // History
+  try {
+    const h = JSON.parse(localStorage.getItem("nc-history"));
+    if (Array.isArray(h)) { S.history = h; renderHistory(); }
+  } catch(e) { console.warn("[NutriCalc] History parse error:", e); } // FIX #30
+  // Trigger preview
+  livePreview();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TOAST NOTIFICATIONS
+════════════════════════════════════════════════════════════════ */
+function toast(msg, type = "inf") {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.className = "toast " + type + " show";
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove("show"), 3400);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   KEYBOARD — Enter = Calculate
+════════════════════════════════════════════════════════════════ */
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeHelp();
+  if (e.key === "Enter" && !["SELECT","BUTTON","INPUT","TEXTAREA"].includes(document.activeElement.tagName)  // FIX #14
+      && !document.getElementById("help-panel").classList.contains("open"))
+    calculateAll();
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   HELP PANEL — Open / Close
+════════════════════════════════════════════════════════════════ */
+function openHelp() {
+  document.getElementById("help-backdrop").classList.add("open");
+  document.getElementById("help-panel").classList.add("open");
+  document.body.style.overflow = "hidden";
+  document.getElementById("help-search").value = "";
+  filterHelp("");
+  // Hide the pulsing dot once user opens help
+  const dot = document.getElementById("helpDot");
+  if (dot) { dot.style.display = "none"; localStorage.setItem("nc-help-seen","1"); }
+  // Focus search bar
+  setTimeout(() => document.getElementById("help-search").focus(), 350);
+}
+function closeHelp() {
+  document.getElementById("help-backdrop").classList.remove("open");
+  document.getElementById("help-panel").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HELP ACCORDION — toggle individual sections
+════════════════════════════════════════════════════════════════ */
+function toggleHelp(btn) {
+  const section = btn.closest(".ha-section");
+  const isOpen  = section.classList.contains("ha-open");
+  // Close all open sections
+  document.querySelectorAll(".ha-section.ha-open").forEach(s => s.classList.remove("ha-open"));
+  // Toggle the clicked one
+  if (!isOpen) section.classList.add("ha-open");
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   QUICK NAV — jump to section and open it
+════════════════════════════════════════════════════════════════ */
+function jumpToSection(id) {
+  // Close all, open target
+  document.querySelectorAll(".ha-section").forEach(s => s.classList.remove("ha-open"));
+  const sec = document.getElementById(id);
+  if (!sec) return;
+  sec.classList.add("ha-open");
+  // Scroll to it inside the panel body
+  setTimeout(() => {
+    sec.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 60);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HELP SEARCH — filter sections by keyword
+════════════════════════════════════════════════════════════════ */
+function filterHelp(query) {
+  const q       = query.toLowerCase().trim();
+  const sections = document.querySelectorAll(".ha-section");
+  const noRes   = document.getElementById("hp-no-results");
+  let visible   = 0;
+
+  sections.forEach(sec => {
+    const searchData = (sec.getAttribute("data-search") || "").toLowerCase();
+    const labelText  = (sec.querySelector(".ha-label")?.textContent || "").toLowerCase();
+    const innerText  = (sec.querySelector(".ha-inner")?.textContent || "").toLowerCase();
+    const match      = !q || searchData.includes(q) || labelText.includes(q) || innerText.includes(q);
+    sec.style.display = match ? "" : "none";
+    if (match) {
+      visible++;
+      // Auto-expand if search has a query
+      if (q) sec.classList.add("ha-open");
+      else   sec.classList.remove("ha-open");
+    }
+  });
+
+  noRes.classList.toggle("show", visible === 0);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   INIT — show help dot if user hasn't seen help yet
+════════════════════════════════════════════════════════════════ */
+(function initHelpDot() {
+  if (localStorage.getItem("nc-help-seen")) {
+    const dot = document.getElementById("helpDot");
+    if (dot) dot.style.display = "none";
+  }
+})();
+</script>
+
+<!--
+════════════════════════════════════════════════════════════════
+  GOOGLE APPS SCRIPT BACKEND
+  Copy the code below into your Google Apps Script editor.
+════════════════════════════════════════════════════════════════
+
+function doPost(e) {
+  var sheet = SpreadsheetApp
+    .openById("YOUR_SPREADSHEET_ID_HERE")
+    .getSheetByName("Sheet1");
+
+  var data = JSON.parse(e.postData.contents);
+
+  sheet.appendRow([
+    new Date(),          // A  Timestamp
+    data.name,           // B  Name
+    data.age,            // C  Age
+    data.sex,            // D  Sex
+    data.height,         // E  Height (cm)
+    data.weight,         // F  Weight (kg)
+    data.activity,       // G  Activity Level
+    data.bmr,            // H  BMR
+    data.tdee,           // I  TDEE
+    data.bmi,            // J  BMI
+    data.bmiCategory,    // K  BMI Category
+    data.dbw,            // L  DBW (kg)
+    data.adjbw,          // M  AdjBW (kg)
+    data.maintenance,    // N  Maintenance Cal
+    data.fatLoss,        // O  Fat Loss Cal
+    data.muscleGain,     // P  Muscle Gain Cal
+    data.protein,        // Q  Protein (g)
+    data.fat,            // R  Fat (g)
+    data.carbs           // S  Carbohydrates (g)
+  ]);
+
+  return ContentService
+    .createTextOutput("Success")
+    .setMimeType(ContentService.MimeType.TEXT);
+}
+
+════════════════════════════════════════════════════════════════
+  GOOGLE SHEET COLUMN SETUP (Row 1 Headers):
+  A=Timestamp | B=Name | C=Age | D=Sex | E=Height(cm) |
+  F=Weight(kg) | G=Activity | H=BMR | I=TDEE | J=BMI |
+  K=BMI Category | L=DBW(kg) | M=AdjBW(kg) |
+  N=Maintenance | O=Fat Loss | P=Muscle Gain |
+  Q=Protein(g) | R=Fat(g) | S=Carbs(g)
+
+════════════════════════════════════════════════════════════════
+  DEPLOYMENT STEPS:
+  1. Open Google Sheets → create new spreadsheet
+  2. Add the 19 column headers above in Row 1 of Sheet1
+  3. Click Extensions → Apps Script
+  4. Paste the doPost() function above, save (Ctrl+S)
+  5. Click Deploy → New Deployment
+  6. Type: Web App
+  7. Execute as: Me
+  8. Who has access: Anyone
+  9. Click Deploy → copy the Web App URL
+  10. Paste the URL into GOOGLE_SCRIPT_URL at the top of
+      the <script> section in this HTML file
+════════════════════════════════════════════════════════════════
+-->
+</body>
+</html>
