@@ -1694,7 +1694,7 @@ footer a { color: var(--green); text-decoration: none; }
           <div class="h-def">
             <div class="h-def-term"><span class="h-def-icon">⚖️</span> DBW — Desirable Body Weight (Hamwi Formula)</div>
             <div class="h-def-desc">The recommended body weight for your height based on the Hamwi formula, commonly used in clinical nutrition settings to calculate nutritional requirements. Note: this formula is validated for adults of average stature and extrapolates below its range for heights under 5ft.</div>
-            <div class="h-def-formula">Male: 112 + (4 × inches above 5ft) → ÷ 2.2046 = kg<br/>Female: 105 + (4 × inches above 5ft) → ÷ 2.2046 = kg</div>
+            <div class="h-def-formula">Male: 112 + (4 × inches above 5ft) → ÷ 2.2046 = kg<br/>Female: 106 + (4 × inches above 5ft) → ÷ 2.2046 = kg</div>
           </div>
 
           <div class="h-def">
@@ -2324,7 +2324,7 @@ function calculateAll() {
      4. DBW — NDAP Formula
      Base 5ft = 60 inches
   ══════════════════════════════════════════ */
-  const baseLbs  = sex === "male" ? 112 : 105;
+  const baseLbs  = sex === "male" ? 112 : 106;      // NDAP: male=112, female=106
   const inchesOver5ft = totalIn - 60;               // negative if under 5ft
   const dbwLbs   = baseLbs + (4 * inchesOver5ft);   // works for under 5ft too (subtracts)
   const dbwKg    = dbwLbs / 2.2046;   // FIX #1: precise lbs→kg factor
@@ -2518,9 +2518,9 @@ function renderSteps() {
   const sexNote  = r.sex === "male" ? "Male: +5" : "Female: −161";
   const hM = (r.heightCm / 100).toFixed(2);
   const hMsq = (Math.pow(r.heightCm / 100, 2)).toFixed(4);
-  const baseLbs = r.sex === "male" ? 112 : 105;
+  const baseLbs = r.sex === "male" ? 112 : 106;
   const baseFormula = r.sex === "male"
-    ? "DBW = 112 + (4 × inches over 5ft)" : "DBW = 105 + (4 × inches over 5ft)";
+    ? "DBW = 112 + (4 × inches over 5ft)" : "DBW = 106 + (4 × inches over 5ft)";
 
   /* ─ BMR & TDEE steps ─ */
   document.getElementById("steps-bmr").innerHTML = `
@@ -2559,10 +2559,12 @@ BMI = ${rW} ÷ ${hMsq}
 BMI = <span class="hl">${r.bmi}</span>  → Category: <span class="hlt">${r.bmiCat}</span>
 
 Scale reference:
-  &lt; 18.5  = Underweight
+  &lt; 18.5    = Underweight
   18.5–24.9 = Normal weight  ✓
   25–29.9   = Overweight
-  ≥ 30      = Obese</div>
+  30–34.9   = Obese Class I
+  35–39.9   = Obese Class II
+  ≥ 40      = Obese Class III</div>
 </div>`;
 
   /* ─ DBW / AdjBW steps ─ */
