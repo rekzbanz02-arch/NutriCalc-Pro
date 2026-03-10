@@ -589,6 +589,222 @@ table.hist-table {
 #toast.err { border-color: var(--terra-mid); color: var(--terra); }
 #toast.inf { border-color: var(--gold);      color: var(--gold); }
 
+/* ═══ GOAL SELECTOR ══════════════════════════════════════════ */
+.goal-selector-wrap {
+  display: flex; gap: 10px; margin-top: 16px;
+  flex-direction: column;
+}
+.goal-selector-label {
+  font-size: .78rem; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .65px;
+}
+.goal-btns {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+}
+.goal-btn {
+  padding: 12px 10px; border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--bg2); color: var(--muted);
+  font-family: var(--font-body); font-size: .88rem; font-weight: 600;
+  cursor: pointer; transition: all var(--transition);
+  text-align: center; line-height: 1.3;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.goal-btn .gb-icon { font-size: 1.3rem; }
+.goal-btn .gb-label { font-size: .78rem; font-weight: 700; }
+.goal-btn .gb-sub { font-size: .7rem; color: var(--muted2); line-height: 1.2; }
+.goal-btn.active-maint { border-color: var(--green); color: var(--green); background: var(--green-pale); }
+.goal-btn.active-loss  { border-color: var(--terra); color: var(--terra); background: var(--terra-pale); }
+.goal-btn.active-gain  { border-color: var(--navy);  color: var(--navy);  background: var(--blue-pale); }
+
+/* ═══ NDAP EXCHANGE SECTION ══════════════════════════════════ */
+.exchange-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+  gap: 12px; margin-bottom: 18px;
+}
+.exch-tile {
+  border-radius: var(--radius-sm); padding: 16px 14px;
+  border: 1.5px solid var(--border);
+  background: var(--surface2);
+  transition: transform var(--transition), box-shadow var(--transition);
+  cursor: pointer; position: relative; overflow: hidden;
+}
+.exch-tile:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.exch-tile::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+.exch-rice::before   { background: var(--terra); }
+.exch-fruit::before  { background: var(--gold); }
+.exch-veg::before    { background: var(--green-mid); }
+.exch-meat::before   { background: #8b4513; }
+.exch-milk::before   { background: var(--navy); }
+.exch-fat::before    { background: #c9882c; }
+
+.exch-icon { font-size: 1.6rem; margin-bottom: 8px; display: block; }
+.exch-name { font-size: .72rem; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .6px; margin-bottom: 4px; }
+.exch-count {
+  font-family: var(--font-head); font-size: 2.2rem; font-weight: 900;
+  line-height: 1; color: var(--text); margin-bottom: 2px;
+}
+.exch-unit { font-size: .75rem; color: var(--muted); }
+.exch-cal  { font-size: .72rem; color: var(--muted2); margin-top: 4px; }
+.exch-examples {
+  display: none; margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.exch-tile.ex-open .exch-examples { display: block; }
+.exch-example-item {
+  font-size: .74rem; color: var(--muted); line-height: 1.6;
+  padding: 2px 0;
+}
+.exch-example-item::before { content: '• '; color: var(--muted2); }
+.exch-toggle-btn {
+  display: flex; align-items: center; gap: 4px;
+  font-size: .7rem; color: var(--muted); margin-top: 8px;
+  cursor: pointer; font-weight: 600; background: none; border: none;
+  padding: 0; font-family: var(--font-body);
+}
+.exch-chevron { transition: transform var(--transition-s); display: inline-block; font-size: 9px; }
+.exch-tile.ex-open .exch-chevron { transform: rotate(180deg); }
+
+/* Goal Adjusted Banner */
+.goal-cal-banner {
+  border-radius: var(--radius-sm); padding: 16px 18px; margin-bottom: 18px;
+  border: 1.5px solid; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+.gcb-icon { font-size: 1.8rem; flex-shrink: 0; }
+.gcb-info { flex: 1; }
+.gcb-title { font-size: .72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .8px; margin-bottom: 3px; }
+.gcb-val { font-family: var(--font-head); font-size: 2rem; font-weight: 900;
+  line-height: 1.1; color: var(--text); }
+.gcb-sub { font-size: .78rem; color: var(--muted); margin-top: 2px; }
+.gcb-pill {
+  flex-shrink: 0; padding: 5px 14px; border-radius: 100px;
+  font-size: .78rem; font-weight: 700; border: 1.5px solid;
+}
+
+/* ═══ MEAL PLAN ═══════════════════════════════════════════════ */
+.meal-plan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+}
+.meal-card {
+  border-radius: var(--radius-sm); padding: 16px 14px;
+  border: 1.5px solid var(--border);
+  background: var(--surface2);
+}
+.meal-card-title {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 700; font-size: .92rem; color: var(--text);
+  margin-bottom: 12px; padding-bottom: 10px;
+  border-bottom: 1.5px solid var(--border);
+}
+.meal-card-icon {
+  width: 30px; height: 30px; border-radius: var(--radius-xs);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; flex-shrink: 0;
+}
+.meal-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 5px 0; font-size: .82rem;
+  border-bottom: 1px dashed var(--border);
+}
+.meal-item:last-child { border-bottom: none; }
+.meal-item-name { color: var(--text2); }
+.meal-item-qty {
+  font-family: var(--font-head); font-size: .88rem;
+  font-weight: 700; color: var(--text); white-space: nowrap;
+}
+.meal-total {
+  margin-top: 10px; padding: 7px 10px;
+  background: var(--bg2); border-radius: var(--radius-xs);
+  font-size: .76rem; text-align: center; color: var(--muted);
+}
+.meal-total strong { color: var(--text); }
+
+/* ═══ PORTION GUIDE ══════════════════════════════════════════ */
+.portion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+.portion-card {
+  border-radius: var(--radius-sm); padding: 16px 14px;
+  border: 1.5px solid var(--border); background: var(--surface2);
+}
+.portion-card-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+  cursor: pointer;
+}
+.portion-card-icon {
+  width: 36px; height: 36px; border-radius: var(--radius-xs);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.portion-card-title { font-weight: 700; font-size: .92rem; color: var(--text); flex: 1; }
+.portion-card-kcal {
+  font-size: .72rem; font-weight: 700; padding: 3px 8px;
+  border-radius: 100px; background: var(--bg2); color: var(--muted);
+  border: 1px solid var(--border); flex-shrink: 0;
+}
+.portion-chevron {
+  font-size: 9px; color: var(--muted); transition: transform var(--transition-s);
+  flex-shrink: 0;
+}
+.portion-card.pc-open .portion-chevron { transform: rotate(180deg); }
+.portion-body { display: none; }
+.portion-card.pc-open .portion-body { display: block; }
+.portion-item {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 7px 0; border-bottom: 1px dashed var(--border);
+  font-size: .82rem;
+}
+.portion-item:last-child { border-bottom: none; }
+.portion-item-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green-mid); margin-top: 6px; flex-shrink: 0;
+}
+.portion-item-text { color: var(--text2); line-height: 1.5; }
+.portion-item-text strong { color: var(--text); display: block; font-size: .85rem; }
+
+/* ═══ PRINT BUTTON ═══════════════════════════════════════════ */
+.btn-print {
+  background: var(--navy); color: #fff;
+  box-shadow: 0 4px 18px rgba(29,53,87,.3);
+}
+.btn-print:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(29,53,87,.4); }
+[data-theme="dark"] .btn-print { background: var(--navy-mid); }
+
+/* ═══ PRINT MEDIA QUERY ══════════════════════════════════════ */
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  body { background: #fff !important; color: #000 !important; font-family: Georgia, serif; }
+  body::before { display: none !important; }
+  .bg-orbs { display: none !important; }
+  #app { max-width: 100% !important; padding: 0 !important; }
+  header, .unit-bar, .card:first-of-type, #preview-bar,
+  .btn-row, #results-wrap .section-label ~ .accordion,
+  #hist-card, footer, #help-backdrop, #help-panel,
+  #toast, .dots-menu, #dotsBtn, .icon-btn,
+  .action-row, .calorie-grid, .macro-bar-wrap,
+  .macro-row, #results-wrap .section-label:not(.print-section-label),
+  .acc-body, .hist-acc-body { display: none !important; }
+  #results-wrap { opacity: 1 !important; transform: none !important;
+    height: auto !important; overflow: visible !important;
+    pointer-events: all !important; }
+  .print-page { display: block !important; }
+  .print-page { page-break-inside: avoid; }
+  @page { size: A4; margin: 18mm 16mm; }
+}
+
+/* Print page — hidden on screen, shown on print */
+.print-page { display: none; }
+
 /* ═══ FOOTER ═════════════════════════════════════════════════ */
 footer {
   text-align: center; padding: 24px 0 0;
@@ -1245,6 +1461,32 @@ footer a { color: var(--green); text-decoration: none; }
 
     </div><!-- /form-grid -->
 
+    <!-- ── DIET GOAL SELECTOR ─────────────────────────────── -->
+    <div class="goal-selector-wrap">
+      <div class="goal-selector-label">
+        <span class="tt-wrap">Diet Goal
+          <span class="tt-icon" data-tip="Your goal adjusts calorie prescription: Maintenance = TDEE, Weight Loss = TDEE−500, Weight Gain = TDEE+500.">i</span>
+        </span>
+      </div>
+      <div class="goal-btns">
+        <button class="goal-btn active-maint" id="goal-maint" onclick="setDietGoal('maintenance')">
+          <span class="gb-icon">⚖️</span>
+          <span class="gb-label">Maintenance</span>
+          <span class="gb-sub">Keep current weight</span>
+        </button>
+        <button class="goal-btn" id="goal-loss" onclick="setDietGoal('loss')">
+          <span class="gb-icon">🔻</span>
+          <span class="gb-label">Weight Loss</span>
+          <span class="gb-sub">TDEE − 500 kcal</span>
+        </button>
+        <button class="goal-btn" id="goal-gain" onclick="setDietGoal('gain')">
+          <span class="gb-icon">🔺</span>
+          <span class="gb-label">Weight Gain</span>
+          <span class="gb-sub">TDEE + 500 kcal</span>
+        </button>
+      </div>
+    </div>
+
     <!-- Live preview bar — FIX #18 -->
     <div id="preview-bar" aria-live="polite" aria-atomic="true">
       <span class="pb-item"><span class="pb-label">BMR:</span> <span id="pb-bmr">—</span> cal</span>
@@ -1363,6 +1605,25 @@ footer a { color: var(--green); text-decoration: none; }
 
     <!-- ── MACROS ────────────────────────── -->
     <div class="section-label">🥗 Daily Macronutrients</div>
+
+    <!-- Goal selector dropdown -->
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;">
+      <label for="macro-goal-select" style="font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;white-space:nowrap;">Show macros for:</label>
+      <div style="position:relative;flex:1;min-width:200px;">
+        <select id="macro-goal-select"
+          onchange="switchMacroGoal(this.value)"
+          style="width:100%;background:var(--surface);border:1.5px solid var(--green-mid);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font-body);font-size:.95rem;font-weight:600;padding:10px 36px 10px 14px;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;transition:border-color .2s,box-shadow .2s;">
+          <option value="maintenance">🟢 Maintenance</option>
+          <option value="loss">🔻 Fat Loss</option>
+          <option value="gain">🔺 Muscle Gain</option>
+        </select>
+        <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--green);font-size:.75rem;">▼</span>
+      </div>
+    </div>
+
+    <!-- Goal context banner -->
+    <div id="macro-goal-banner" style="font-size:.82rem;font-weight:600;padding:9px 14px;border-radius:var(--radius-xs);border:1.5px solid;margin-bottom:14px;line-height:1.4;transition:all .25s;"></div>
+
     <!-- Macro proportion bar -->
     <div class="macro-bar-wrap">
       <div class="macro-bar-track">
@@ -1477,12 +1738,81 @@ footer a { color: var(--green); text-decoration: none; }
       <div class="action-row">
         <button class="btn btn-terra btn-sm" onclick="exportSVG()">📸 Save as Image</button>
         <button class="btn btn-outline btn-sm" onclick="shareResults()">🔗 Share Results</button>
+        <button class="btn btn-print btn-sm" onclick="printDietPlan()">🖨️ Print Diet Plan</button>
         <button class="btn btn-outline btn-sm" id="syncBtn" onclick="syncSheets()">☁️ Sync to Cloud</button>
       </div>
       <p style="font-size:.78rem;color:var(--muted);margin-top:12px;line-height:1.7;">
         ☁️ Results auto-sync to Cloud on Calculate.<br/>
-        
       </p>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         NDAP EXCHANGE SECTION
+    ══════════════════════════════════════════ -->
+    <div class="section-label print-section-label">🌾 Daily Food Exchanges (NDAP System)</div>
+
+    <!-- Goal Adjusted Calorie Banner -->
+    <div id="goal-cal-banner" class="goal-cal-banner" style="background:var(--green-pale);border-color:var(--green-light);">
+      <div class="gcb-icon">⚖️</div>
+      <div class="gcb-info">
+        <div class="gcb-title" style="color:var(--green);">Daily Calorie Goal</div>
+        <div class="gcb-val" id="gcb-val">—</div>
+        <div class="gcb-sub">kcal / day — based on your goal</div>
+      </div>
+      <div class="gcb-pill" id="gcb-pill" style="color:var(--green);border-color:var(--green-light);background:rgba(255,255,255,.5);">Maintenance</div>
+    </div>
+
+    <div class="card" style="margin-bottom:18px;">
+      <div class="card-title">
+        <span class="ct-icon green">🍽️</span>
+        Daily Food Exchanges
+        <span style="margin-left:auto;font-size:.74rem;font-weight:600;color:var(--muted);">Click any tile to see examples</span>
+      </div>
+      <div class="exchange-grid" id="exchange-grid">
+        <!-- populated by JS -->
+      </div>
+      <div style="font-size:.76rem;color:var(--muted);line-height:1.7;padding:10px 14px;background:var(--bg2);border-radius:var(--radius-xs);border:1px solid var(--border);">
+        <strong style="color:var(--text);">📌 NDAP Distribution:</strong>
+        Rice/Starch 40% · Meat/Protein 20% · Fat 20% · Fruit 10% · Vegetables 10%
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         MEAL PLAN SECTION
+    ══════════════════════════════════════════ -->
+    <div class="section-label print-section-label">🗓️ Automatic Meal Plan</div>
+    <div class="card" style="margin-bottom:18px;">
+      <div class="card-title">
+        <span class="ct-icon gold">📋</span>
+        Daily Meal Distribution
+      </div>
+      <div class="meal-plan-grid" id="meal-plan-grid">
+        <!-- populated by JS -->
+      </div>
+      <div style="margin-top:14px;font-size:.76rem;color:var(--muted);line-height:1.7;padding:10px 14px;background:var(--bg2);border-radius:var(--radius-xs);border:1px solid var(--border);">
+        <strong style="color:var(--text);">📌 Distribution:</strong>
+        Breakfast 20% · Lunch 40% · Dinner 40% · Snacks: Fruit + Milk
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PORTION GUIDE SECTION
+    ══════════════════════════════════════════ -->
+    <div class="section-label print-section-label">📏 Food Portion Visual Guide</div>
+    <div class="card" style="margin-bottom:18px;">
+      <div class="card-title">
+        <span class="ct-icon navy">📐</span>
+        Portion Guide — NDAP Exchange System
+        <span style="margin-left:auto;font-size:.74rem;font-weight:600;color:var(--muted);">Click to expand each group</span>
+      </div>
+      <div class="portion-grid" id="portion-grid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- Hidden Printable Diet Prescription Sheet -->
+    <div class="print-page" id="print-sheet">
+      <!-- populated by printDietPlan() -->
     </div>
 
   </div><!-- /results-wrap -->
@@ -1574,6 +1904,7 @@ footer a { color: var(--green); text-decoration: none; }
     <a class="qn-chip" onclick="jumpToSection('hs-calcs')">🧮 Calculations</a>
     <a class="qn-chip" onclick="jumpToSection('hs-activity')">🏃 Activity Levels</a>
     <a class="qn-chip" onclick="jumpToSection('hs-results')">📊 Results</a>
+    <a class="qn-chip" onclick="jumpToSection('hs-ndap')">🌾 NDAP Exchange</a>
   </div>
 
   <!-- Scrollable content -->
@@ -1922,12 +2253,28 @@ footer a { color: var(--green); text-decoration: none; }
           <!-- ── MACROS ── -->
           <p style="font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:4px;">🥗 Daily Macronutrient Targets</p>
           <p style="font-size:.82rem;color:var(--muted);margin-bottom:10px;line-height:1.6;">
-            Macros are the three main nutrients your body needs every day. The grams shown are your daily targets based on your weight and activity level.
+            Macros are the three main nutrients your body needs every day. Use the <strong style="color:var(--text);">"Show macros for"</strong> dropdown above the macro tiles to switch between Maintenance, Fat Loss, and Muscle Gain targets. The protein and fat amounts stay the same — only carbohydrates change to match your calorie goal.
           </p>
+
+          <!-- Goal comparison table -->
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px;font-size:.78rem;">
+            <div style="padding:8px 10px;background:var(--green-pale);border-radius:var(--radius-xs);border-top:3px solid var(--green);">
+              <div style="font-weight:700;color:var(--green);margin-bottom:4px;">🟢 Maintenance</div>
+              <div style="color:var(--muted);line-height:1.5;">Carbs calculated from TDEE calories. Protein &amp; fat same across all goals.</div>
+            </div>
+            <div style="padding:8px 10px;background:var(--terra-pale);border-radius:var(--radius-xs);border-top:3px solid var(--terra);">
+              <div style="font-weight:700;color:var(--terra);margin-bottom:4px;">🔻 Fat Loss</div>
+              <div style="color:var(--muted);line-height:1.5;">Carbs reduced to match TDEE − 500 cal. Lower carbs = lower total calories.</div>
+            </div>
+            <div style="padding:8px 10px;background:var(--blue-pale);border-radius:var(--radius-xs);border-top:3px solid var(--navy);">
+              <div style="font-weight:700;color:var(--navy);margin-bottom:4px;">🔺 Muscle Gain</div>
+              <div style="color:var(--muted);line-height:1.5;">Carbs increased to match TDEE + 300 cal. More carbs = more fuel for training.</div>
+            </div>
+          </div>
 
           <div class="h-def" style="border-left-color:var(--green);margin-bottom:8px;">
             <div class="h-def-term" style="color:var(--green);"><span class="h-def-icon">🥩</span> Protein</div>
-            <div class="h-def-desc">Builds and repairs muscle. Keeps you full. Essential after any kind of exercise. Target: 1.0–2.0 g per kg of body weight depending on activity level.</div>
+            <div class="h-def-desc">Builds and repairs muscle. Keeps you full. Essential after any kind of exercise. Target: 1.0–2.0 g per kg of body weight depending on activity level. <strong>Protein target is the same regardless of goal</strong> — your muscles need the same support whether you're cutting or bulking.</div>
             <div style="margin-top:5px;padding:6px 10px;background:var(--green-pale);border-radius:6px;font-size:.79rem;color:var(--green);font-style:italic;">
               💡 Example: 70 kg moderately active person → target ≈ <strong>112 g protein/day</strong> (1.6 g/kg). That's roughly 4 chicken breasts.
             </div>
@@ -1935,7 +2282,7 @@ footer a { color: var(--green); text-decoration: none; }
 
           <div class="h-def" style="border-left-color:var(--gold);margin-bottom:8px;">
             <div class="h-def-term" style="color:var(--gold);"><span class="h-def-icon">🥑</span> Fat</div>
-            <div class="h-def-desc">Supports hormone production, vitamin absorption (A, D, E, K), and brain health. Not to be feared — dietary fat does not directly become body fat. Target: 0.8 g per kg of body weight.</div>
+            <div class="h-def-desc">Supports hormone production, vitamin absorption (A, D, E, K), and brain health. Target: 0.8 g per kg of body weight. <strong>Fat target is the same regardless of goal</strong> — keeping fat consistent protects hormone balance during calorie changes.</div>
             <div style="margin-top:5px;padding:6px 10px;background:var(--gold-pale);border-radius:6px;font-size:.79rem;color:var(--gold);font-style:italic;">
               💡 Example: 70 kg person → target ≈ <strong>56 g fat/day</strong>. That's about 4 tablespoons of olive oil worth of fat.
             </div>
@@ -1943,9 +2290,10 @@ footer a { color: var(--green); text-decoration: none; }
 
           <div class="h-def" style="border-left-color:var(--terra);margin-bottom:8px;">
             <div class="h-def-term" style="color:var(--terra);"><span class="h-def-icon">🍚</span> Carbohydrates</div>
-            <div class="h-def-desc">Your body's primary and preferred energy source, especially during exercise. Carbs fill the remaining calories after protein and fat are accounted for. They fuel your workouts and support brain function.</div>
+            <div class="h-def-desc">Your body's primary energy source, especially during exercise. <strong>Carbs are the only macro that changes between goals</strong> — they fill the remaining calories after protein and fat are set. Lower for fat loss, higher for muscle gain.</div>
             <div style="margin-top:5px;padding:6px 10px;background:var(--terra-pale);border-radius:6px;font-size:.79rem;color:var(--terra);font-style:italic;">
-              💡 Example: 2,100 cal/day, 112 g protein (448 kcal), 56 g fat (504 kcal) → remaining 1,148 kcal ÷ 4 = <strong>287 g carbs/day</strong>. That's about 4–5 cups of cooked rice.
+              💡 Example (same 70 kg person, 2,100 cal maintenance):<br/>
+              Maintenance → <strong>287 g carbs</strong> | Fat Loss → <strong>162 g carbs</strong> | Muscle Gain → <strong>362 g carbs</strong>
             </div>
           </div>
 
@@ -2013,6 +2361,87 @@ footer a { color: var(--green); text-decoration: none; }
       </div>
     </div><!-- /hs-features -->
 
+    <!-- ═══════════════════════════════════════
+         SECTION 6 — NDAP EXCHANGE SYSTEM
+    ═══════════════════════════════════════ -->
+    <div class="ha-section" id="hs-ndap" data-search="ndap exchange system philippines food groups rice starch fruit vegetables meat protein milk fat diet planning portions dietitian exchange table">
+      <button class="ha-btn" onclick="toggleHelp(this)">
+        <div class="ha-icon"><span>🌾</span></div>
+        <div class="ha-label">What is the NDAP Exchange System?</div>
+        <div class="ha-chevron">▼</div>
+      </button>
+      <div class="ha-body">
+        <div class="ha-inner">
+
+          <p style="font-size:.88rem;color:var(--text2);line-height:1.7;margin-bottom:14px;">
+            The <strong style="color:var(--text)">NDAP Exchange System</strong> is a diet planning method used by registered dietitians and nutritionists in the Philippines. Developed under the Nutritional Guidelines by the National Nutrition Council, it organises foods into groups based on similar calorie content and nutrients. One standard portion within a group is called an <strong style="color:var(--green)">exchange</strong>, and foods within the same group can substitute each other without changing total calorie intake.
+          </p>
+
+          <div class="h-def" style="border-left-color:var(--terra);margin-bottom:8px;">
+            <div class="h-def-term" style="color:var(--terra);"><span class="h-def-icon">🍚</span> Rice / Starch — 80 kcal per exchange</div>
+            <div class="h-def-desc">The primary carbohydrate source. Forms the foundation of the Filipino diet.</div>
+            <div class="h-def-formula">½ cup cooked rice = 1 slice bread = ½ cup pasta = 1 small potato → 1 Exchange</div>
+          </div>
+
+          <div class="h-def" style="border-left-color:var(--gold);margin-bottom:8px;">
+            <div class="h-def-term" style="color:var(--gold);"><span class="h-def-icon">🍌</span> Fruit — 60 kcal per exchange</div>
+            <div class="h-def-desc">Natural sugars and vitamins. Usually distributed to breakfast and snacks.</div>
+            <div class="h-def-formula">1 small banana = 1 medium apple = ½ cup mango = 1 cup papaya → 1 Exchange</div>
+          </div>
+
+          <div class="h-def" style="border-left-color:var(--green-mid);margin-bottom:8px;">
+            <div class="h-def-term" style="color:var(--green);"><span class="h-def-icon">🥦</span> Vegetables — 25 kcal per exchange</div>
+            <div class="h-def-desc">Low calorie, high fibre. Distributed mainly in lunch and dinner meals.</div>
+            <div class="h-def-formula">½ cup carrots = 1 cup cabbage = ½ cup green beans → 1 Exchange</div>
+          </div>
+
+          <div class="h-def" style="border-left-color:#8b4513;margin-bottom:8px;">
+            <div class="h-def-term" style="color:#8b4513;"><span class="h-def-icon">🥩</span> Meat / Protein — 55 kcal per exchange</div>
+            <div class="h-def-desc">Lean protein sources. Each exchange provides approximately 7g of protein.</div>
+            <div class="h-def-formula">30g chicken = 30g fish = 1 egg = ½ cup tofu → 1 Exchange</div>
+          </div>
+
+          <div class="h-def" style="border-left-color:var(--navy);margin-bottom:8px;">
+            <div class="h-def-term" style="color:var(--navy);"><span class="h-def-icon">🥛</span> Milk — 120 kcal per exchange</div>
+            <div class="h-def-desc">Calcium-rich group. Optional and typically included in snacks.</div>
+            <div class="h-def-formula">1 cup fresh milk = 1 cup yogurt → 1 Exchange</div>
+          </div>
+
+          <div class="h-def" style="border-left-color:var(--gold);margin-bottom:14px;">
+            <div class="h-def-term" style="color:var(--gold);"><span class="h-def-icon">🫒</span> Fat — 45 kcal per exchange</div>
+            <div class="h-def-desc">Concentrated energy source. Use sparingly for cooking and dressings.</div>
+            <div class="h-def-formula">1 tsp cooking oil = 1 tsp butter = 1 tsp mayonnaise → 1 Exchange</div>
+          </div>
+
+          <div class="h-divider"></div>
+
+          <p style="font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:6px;">🧮 How Exchanges Are Calculated</p>
+          <p style="font-size:.82rem;color:var(--muted);margin-bottom:10px;line-height:1.6;">
+            The calculator converts your daily calorie goal (based on TDEE and your selected goal) into food exchanges using NDAP's standard calorie distribution:
+          </p>
+          <div style="background:var(--surface);border-left:3px solid var(--green-mid);border-radius:0 var(--radius-xs) var(--radius-xs) 0;padding:14px 18px;font-family:'Courier New',monospace;font-size:.82rem;line-height:2;color:var(--text2);margin-bottom:12px;">
+            Rice Exchanges &nbsp;= (Calories × 0.40) ÷ 80<br/>
+            Meat Exchanges &nbsp;= (Calories × 0.20) ÷ 55<br/>
+            Fat Exchanges &nbsp;&nbsp;= (Calories × 0.20) ÷ 45<br/>
+            Fruit Exchanges &nbsp;= (Calories × 0.10) ÷ 60<br/>
+            Veg Exchanges &nbsp;&nbsp;= (Calories × 0.10) ÷ 25
+          </div>
+
+          <div class="h-def" style="border-left-color:var(--green);">
+            <div class="h-def-term" style="color:var(--green);"><span class="h-def-icon">💡</span> Example: 2,000 kcal/day</div>
+            <div class="h-def-desc" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px;font-size:.8rem;">
+              <div>🍚 Rice: (2000 × 0.40) ÷ 80 = <strong>10</strong> exchanges</div>
+              <div>🥩 Meat: (2000 × 0.20) ÷ 55 = <strong>7</strong> exchanges</div>
+              <div>🫒 Fat: (2000 × 0.20) ÷ 45 = <strong>9</strong> exchanges</div>
+              <div>🍌 Fruit: (2000 × 0.10) ÷ 60 = <strong>3</strong> exchanges</div>
+              <div>🥦 Veg: (2000 × 0.10) ÷ 25 = <strong>8</strong> exchanges</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div><!-- /hs-ndap -->
+
   </div><!-- /hp-body -->
 
   <!-- Panel footer -->
@@ -2062,6 +2491,86 @@ const LBS_PER_KG       = 2.2046;
 const DEFICIT_LOSS     = 500;
 const SURPLUS_GAIN     = 300;
 const ADJBW_FACTOR     = 0.25;
+
+/* ═══════════════════════════════════════════════════════════════
+   NDAP EXCHANGE TABLE — Philippines Standard
+════════════════════════════════════════════════════════════════ */
+const NDAP_EXCHANGE_TABLE = {
+  rice: {
+    icon: "🍚", label: "Rice / Starch", calories: 80,
+    dist: 0.40,
+    examples: [
+      "½ cup cooked rice",
+      "1 slice white bread",
+      "½ cup cooked pasta",
+      "1 small potato (90g)",
+      "½ cup oatmeal, cooked",
+      "3 pcs small crackers",
+      "1 small dinner roll"
+    ]
+  },
+  fruit: {
+    icon: "🍌", label: "Fruit", calories: 60,
+    dist: 0.10,
+    examples: [
+      "1 small banana",
+      "1 medium apple",
+      "½ cup ripe mango",
+      "1 cup papaya cubes",
+      "1 medium orange",
+      "½ cup watermelon"
+    ]
+  },
+  vegetable: {
+    icon: "🥦", label: "Vegetables", calories: 25,
+    dist: 0.10,
+    examples: [
+      "½ cup cooked carrots",
+      "1 cup raw cabbage",
+      "½ cup green beans",
+      "1 cup kangkong (water spinach)",
+      "½ cup ampalaya slices",
+      "1 cup sayote"
+    ]
+  },
+  meat: {
+    icon: "🥩", label: "Meat / Protein", calories: 55,
+    dist: 0.20,
+    examples: [
+      "30g chicken breast (cooked)",
+      "30g fish fillet",
+      "1 whole egg",
+      "½ cup firm tofu",
+      "30g lean pork",
+      "2 tbsp peanut butter"
+    ]
+  },
+  milk: {
+    icon: "🥛", label: "Milk", calories: 120,
+    dist: 0,          // optional — distributed separately
+    examples: [
+      "1 cup fresh cow's milk",
+      "1 cup low-fat yogurt",
+      "1 cup evaporated milk (diluted)",
+      "¾ cup soy milk"
+    ]
+  },
+  fat: {
+    icon: "🫒", label: "Fat", calories: 45,
+    dist: 0.20,
+    examples: [
+      "1 tsp cooking oil",
+      "1 tsp butter or margarine",
+      "1 tsp mayonnaise",
+      "2 tsp salad dressing",
+      "6 pcs almonds",
+      "5 pcs peanuts"
+    ]
+  }
+};
+
+/* Diet goal state */
+let S_dietGoal = "maintenance"; // "maintenance" | "loss" | "gain"
 
 /* ═══════════════════════════════════════════════════════════════
    SHARED BMR HELPER — FIX #31
@@ -2154,6 +2663,24 @@ function setSex(sex) {
   m.setAttribute("aria-pressed", sex === "male"   ? "true" : "false");   // FIX #17
   f.setAttribute("aria-pressed", sex === "female" ? "true" : "false");   // FIX #17
   livePreview();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DIET GOAL SELECTOR
+════════════════════════════════════════════════════════════════ */
+function setDietGoal(goal) {
+  S_dietGoal = goal;
+  const btns = { maintenance: "goal-maint", loss: "goal-loss", gain: "goal-gain" };
+  const classes = { maintenance: "active-maint", loss: "active-loss", gain: "active-gain" };
+  Object.keys(btns).forEach(g => {
+    const el = document.getElementById(btns[g]);
+    if (!el) return;
+    el.className = "goal-btn" + (g === goal ? " " + classes[g] : "");
+  });
+  // If results exist, re-render the NDAP sections with the new goal
+  if (S.results) {
+    renderNDAPSections();
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2344,16 +2871,31 @@ function calculateAll() {
   ══════════════════════════════════════════ */
   const weightForMacros = bmi >= 25 ? adjBw : (bmi < 18.5 ? dbwKg : weightKg);
   const proteinRatio = actMul <= 1.2 ? 1.0 : actMul <= 1.375 ? 1.4 : actMul <= 1.55 ? 1.6 : 2.0; // FIX #21: activity-tiered protein
-  const protG     = Math.round(weightForMacros * proteinRatio);
-  const fatG      = Math.round(weightForMacros * 0.8);
-  const protKcal  = protG * KCAL_PER_PROTEIN;
-  const fatKcal   = fatG * KCAL_PER_FAT;
-  const carbKcal  = Math.max(0, maintenance - protKcal - fatKcal);
-  const carbG     = Math.round(carbKcal / KCAL_PER_CARB);
-  const totalKcal = protKcal + fatKcal + carbKcal;
-  const protPct   = Math.round((protKcal / totalKcal) * 100);
-  const fatPct    = Math.round((fatKcal  / totalKcal) * 100);
-  const carbPct   = 100 - protPct - fatPct;
+
+  // Helper to compute macro set for a given total calorie target
+  function calcMacros(totalCal) {
+    const pG    = Math.round(weightForMacros * proteinRatio);
+    const fG    = Math.round(weightForMacros * 0.8);
+    const pKcal = pG * KCAL_PER_PROTEIN;
+    const fKcal = fG * KCAL_PER_FAT;
+    const cKcal = Math.max(0, totalCal - pKcal - fKcal);
+    const cG    = Math.round(cKcal / KCAL_PER_CARB);
+    const tot   = pKcal + fKcal + cKcal;
+    return {
+      protG: pG, fatG: fG, carbG: cG,
+      protKcal: pKcal, fatKcal: fKcal, carbKcal: cKcal,
+      protPct: Math.round((pKcal / tot) * 100),
+      fatPct:  Math.round((fKcal  / tot) * 100),
+      carbPct: 100 - Math.round((pKcal / tot) * 100) - Math.round((fKcal / tot) * 100),
+    };
+  }
+
+  const macroMaint = calcMacros(maintenance);
+  const macroLoss  = calcMacros(fatLoss);
+  const macroGain  = calcMacros(muscleGain);
+
+  // Keep top-level aliases pointing to maintenance (default display)
+  const { protG, fatG, carbG, protKcal, fatKcal, carbKcal, protPct, fatPct, carbPct } = macroMaint;
 
   /* ── Store results ── */
   S.results = {
@@ -2370,11 +2912,13 @@ function calculateAll() {
     weightForMacros: weightForMacros.toFixed(1), proteinRatio,
     protG, fatG, carbG, protKcal, fatKcal, carbKcal,
     protPct, fatPct, carbPct,
+    macroMaint, macroLoss, macroGain,
   };
 
   /* ── Render results ── */
   renderResults();
   renderSteps();
+  renderNDAPSections();
 
   /* ── Reveal panel ── */
   const rw = document.getElementById("results-wrap");
@@ -2463,24 +3007,52 @@ function renderResults() {
     floorNote.style.display = "none";
   }
 
-  /* Macros */
-  document.getElementById("r-prot").textContent      = r.protG + "g";
-  document.getElementById("r-prot-kcal").textContent = r.protKcal + " kcal";
-  document.getElementById("r-prot-pct").textContent  = r.protPct + "%";
-  document.getElementById("r-fat").textContent       = r.fatG + "g";
-  document.getElementById("r-fat-kcal").textContent  = r.fatKcal + " kcal";
-  document.getElementById("r-fat-pct").textContent   = r.fatPct + "%";
-  document.getElementById("r-carb").textContent      = r.carbG + "g";
-  document.getElementById("r-carb-kcal").textContent = r.carbKcal + " kcal";
-  document.getElementById("r-carb-pct").textContent  = r.carbPct + "%";
+  /* Macros — render maintenance by default, dropdown switches goal */
+  switchMacroGoal("maintenance");
+}
 
-  /* Macro bar */
-  document.getElementById("mseg-p").style.width = r.protPct + "%";
-  document.getElementById("mseg-f").style.width = r.fatPct  + "%";
-  document.getElementById("mseg-c").style.width = r.carbPct + "%";
-  document.getElementById("mbl-p").textContent = `Protein ${r.protPct}%`;
-  document.getElementById("mbl-f").textContent = `Fat ${r.fatPct}%`;
-  document.getElementById("mbl-c").textContent = `Carbs ${r.carbPct}%`;
+/* ═══════════════════════════════════════════════════════════════
+   SWITCH MACRO GOAL — called by dropdown
+════════════════════════════════════════════════════════════════ */
+function switchMacroGoal(goal) {
+  if (!S.results) return;
+  const r = S.results;
+  const map = { maintenance: r.macroMaint, loss: r.macroLoss, gain: r.macroGain };
+  const m   = map[goal] || r.macroMaint;
+
+  // Sync dropdown if called programmatically
+  const sel = document.getElementById("macro-goal-select");
+  if (sel && sel.value !== goal) sel.value = goal;
+
+  // Goal label banner
+  const labels = {
+    maintenance: { text: "🟢 Maintenance — keeping your current weight", color: "var(--green)", bg: "var(--green-pale)" },
+    loss:        { text: "🔻 Fat Loss — eating in a 500 cal/day deficit",  color: "var(--terra)",  bg: "var(--terra-pale)"  },
+    gain:        { text: "🔺 Muscle Gain — eating in a 300 cal/day surplus", color: "var(--navy)",  bg: "var(--blue-pale)"  },
+  };
+  const lbl = labels[goal];
+  const banner = document.getElementById("macro-goal-banner");
+  banner.textContent  = lbl.text;
+  banner.style.color  = lbl.color;
+  banner.style.background = lbl.bg;
+  banner.style.borderColor = lbl.color;
+
+  document.getElementById("r-prot").textContent      = m.protG + "g";
+  document.getElementById("r-prot-kcal").textContent = m.protKcal + " kcal";
+  document.getElementById("r-prot-pct").textContent  = m.protPct + "%";
+  document.getElementById("r-fat").textContent       = m.fatG + "g";
+  document.getElementById("r-fat-kcal").textContent  = m.fatKcal + " kcal";
+  document.getElementById("r-fat-pct").textContent   = m.fatPct + "%";
+  document.getElementById("r-carb").textContent      = m.carbG + "g";
+  document.getElementById("r-carb-kcal").textContent = m.carbKcal + " kcal";
+  document.getElementById("r-carb-pct").textContent  = m.carbPct + "%";
+
+  document.getElementById("mseg-p").style.width = m.protPct + "%";
+  document.getElementById("mseg-f").style.width = m.fatPct  + "%";
+  document.getElementById("mseg-c").style.width = m.carbPct + "%";
+  document.getElementById("mbl-p").textContent = `Protein ${m.protPct}%`;
+  document.getElementById("mbl-f").textContent = `Fat ${m.fatPct}%`;
+  document.getElementById("mbl-c").textContent = `Carbs ${m.carbPct}%`;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2650,8 +3222,11 @@ function resetAll() {
   setSex("male");
   setUnit("metric");         // FIX #27: restore default unit
   setWeightUnit("kg");       // FIX #27: restore default weight unit
+  setDietGoal("maintenance");
   document.getElementById("results-wrap").classList.remove("revealed");
   document.getElementById("preview-bar").classList.remove("show");
+  const pg = document.getElementById("portion-grid");
+  if (pg) pg.innerHTML = "";
   S.results = null;
   toast("↺ Form reset.", "inf");
 }
@@ -2862,6 +3437,7 @@ function saveStorage() {
   const prefs = {
     unit: S.unit, sex: S.sex,
     weightUnit: S.weightUnit,       // FIX #6
+    dietGoal: S_dietGoal,
     name:     document.getElementById("i-name").value,
     age:      document.getElementById("i-age").value,
     heightCm: document.getElementById("i-height-cm").value,
@@ -2888,6 +3464,7 @@ function loadStorage() {
       setUnit(p.unit || "metric");
       setSex(p.sex || "male");
       if (p.weightUnit) setWeightUnit(p.weightUnit); // FIX #6: restore weight unit
+      if (p.dietGoal)  setDietGoal(p.dietGoal);
       if (p.name)     document.getElementById("i-name").value      = p.name;
       if (p.age)      document.getElementById("i-age").value       = p.age;
       if (p.heightCm) document.getElementById("i-height-cm").value = p.heightCm;
@@ -2915,6 +3492,352 @@ function toast(msg, type = "inf") {
   el.className = "toast " + type + " show";
   clearTimeout(el._t);
   el._t = setTimeout(() => el.classList.remove("show"), 3400);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   NDAP EXCHANGE CALCULATIONS
+════════════════════════════════════════════════════════════════ */
+function calcNDAPExchanges(calories) {
+  return {
+    rice:      Math.round((calories * 0.40) / 80),
+    fruit:     Math.round((calories * 0.10) / 60),
+    vegetable: Math.round((calories * 0.10) / 25),
+    meat:      Math.round((calories * 0.20) / 55),
+    fat:       Math.round((calories * 0.20) / 45),
+    milk:      1   // optional fixed 1 exchange in snack
+  };
+}
+
+function getGoalCalories() {
+  if (!S.results) return 0;
+  const r = S.results;
+  if (S_dietGoal === "loss") return r.fatLoss;
+  if (S_dietGoal === "gain") return r.muscleGain;
+  return r.tdee;
+}
+
+/* ── RENDER ALL NDAP SECTIONS ── */
+function renderNDAPSections() {
+  if (!S.results) return;
+  const goalCal = getGoalCalories();
+  const ex      = calcNDAPExchanges(goalCal);
+
+  // Goal banner
+  renderGoalBanner(goalCal);
+  // Exchange tiles
+  renderExchangeGrid(ex, goalCal);
+  // Meal plan
+  renderMealPlan(ex);
+  // Portion guide (static content)
+  renderPortionGuide();
+}
+
+function renderGoalBanner(goalCal) {
+  const cfg = {
+    maintenance: { icon:"⚖️", title:"Maintenance Goal",  pillTxt:"Maintenance",  pillColor:"var(--green)",  bg:"var(--green-pale)", brd:"var(--green-light)" },
+    loss:        { icon:"🔻", title:"Weight Loss Goal",  pillTxt:"Weight Loss",  pillColor:"var(--terra)",  bg:"var(--terra-pale)", brd:"var(--terra-light)" },
+    gain:        { icon:"🔺", title:"Weight Gain Goal",  pillTxt:"Weight Gain",  pillColor:"var(--navy)",   bg:"var(--blue-pale)",  brd:"var(--navy-mid)"    }
+  };
+  const c = cfg[S_dietGoal];
+  const banner = document.getElementById("goal-cal-banner");
+  if (!banner) return;
+  banner.style.background   = c.bg;
+  banner.style.borderColor  = c.brd;
+  banner.querySelector(".gcb-icon").textContent = c.icon;
+  banner.querySelector(".gcb-title").textContent = c.title;
+  banner.querySelector(".gcb-title").style.color = c.pillColor;
+  banner.querySelector(".gcb-val").textContent   = goalCal.toLocaleString() + " kcal";
+  const pill = banner.querySelector(".gcb-pill");
+  pill.textContent   = c.pillTxt;
+  pill.style.color   = c.pillColor;
+  pill.style.borderColor = c.brd;
+  const adj = S_dietGoal === "loss" ? "−500 kcal from TDEE" : S_dietGoal === "gain" ? "+500 kcal from TDEE" : "= TDEE";
+  banner.querySelector(".gcb-sub").textContent = "kcal / day · " + adj;
+}
+
+function renderExchangeGrid(ex, goalCal) {
+  const grid = document.getElementById("exchange-grid");
+  if (!grid) return;
+  const groups = [
+    { key:"rice",      colorClass:"exch-rice",  tilekcal: ex.rice      * NDAP_EXCHANGE_TABLE.rice.calories },
+    { key:"meat",      colorClass:"exch-meat",  tilekcal: ex.meat      * NDAP_EXCHANGE_TABLE.meat.calories },
+    { key:"fat",       colorClass:"exch-fat",   tilekcal: ex.fat       * NDAP_EXCHANGE_TABLE.fat.calories },
+    { key:"fruit",     colorClass:"exch-fruit", tilekcal: ex.fruit     * NDAP_EXCHANGE_TABLE.fruit.calories },
+    { key:"vegetable", colorClass:"exch-veg",   tilekcal: ex.vegetable * NDAP_EXCHANGE_TABLE.vegetable.calories },
+    { key:"milk",      colorClass:"exch-milk",  tilekcal: ex.milk      * NDAP_EXCHANGE_TABLE.milk.calories }
+  ];
+  grid.innerHTML = groups.map(g => {
+    const info  = NDAP_EXCHANGE_TABLE[g.key];
+    const count = ex[g.key];
+    const exText = info.examples.map(e => `<div class="exch-example-item">${e}</div>`).join("");
+    return `<div class="exch-tile ${g.colorClass}" id="exch-${g.key}" onclick="toggleExchTile('${g.key}')">
+      <span class="exch-icon">${info.icon}</span>
+      <div class="exch-name">${info.label}</div>
+      <div class="exch-count">${count}</div>
+      <div class="exch-unit">exchanges</div>
+      <div class="exch-cal">${info.calories} kcal each · ${g.tilekcal} kcal total</div>
+      <button class="exch-toggle-btn" onclick="event.stopPropagation();toggleExchTile('${g.key}')">
+        Examples <span class="exch-chevron">▼</span>
+      </button>
+      <div class="exch-examples">${exText}</div>
+    </div>`;
+  }).join("");
+}
+
+function toggleExchTile(key) {
+  const tile = document.getElementById("exch-" + key);
+  if (tile) tile.classList.toggle("ex-open");
+}
+
+function renderMealPlan(ex) {
+  const grid = document.getElementById("meal-plan-grid");
+  if (!grid) return;
+  // Distribution logic
+  const mealData = [
+    {
+      icon: "☀️", label: "Breakfast", bg: "#fdf0d5", iconBg: "#fde0a0",
+      items: [
+        { name: "🍚 Rice / Starch",  qty: Math.round(ex.rice  * 0.20) + " exchanges" },
+        { name: "🥩 Meat / Protein", qty: Math.round(ex.meat  * 0.15) + " exchanges" },
+        { name: "🍌 Fruit",          qty: "1 exchange" },
+        { name: "🥛 Milk",           qty: "1 exchange" },
+      ]
+    },
+    {
+      icon: "🌤️", label: "Lunch", bg: "#d8f3dc", iconBg: "#b7e4c7",
+      items: [
+        { name: "🍚 Rice / Starch",  qty: Math.round(ex.rice  * 0.40) + " exchanges" },
+        { name: "🥩 Meat / Protein", qty: Math.round(ex.meat  * 0.40) + " exchanges" },
+        { name: "🥦 Vegetables",     qty: Math.round(ex.vegetable * 0.50) + " exchanges" },
+        { name: "🫒 Fat",             qty: Math.round(ex.fat   * 0.40) + " exchanges" },
+      ]
+    },
+    {
+      icon: "🌆", label: "Dinner", bg: "#d6e8f9", iconBg: "#a8ccf0",
+      items: [
+        { name: "🍚 Rice / Starch",  qty: Math.round(ex.rice  * 0.40) + " exchanges" },
+        { name: "🥩 Meat / Protein", qty: Math.round(ex.meat  * 0.40) + " exchanges" },
+        { name: "🥦 Vegetables",     qty: Math.round(ex.vegetable * 0.50) + " exchanges" },
+        { name: "🫒 Fat",             qty: Math.round(ex.fat   * 0.40) + " exchanges" },
+      ]
+    },
+    {
+      icon: "🍎", label: "Snack", bg: "#fde8e0", iconBg: "#ffcab0",
+      items: [
+        { name: "🍌 Fruit",          qty: Math.max(1, ex.fruit - 1) + " exchange(s)" },
+        { name: "🫒 Fat",             qty: Math.round(ex.fat * 0.20) + " exchanges" },
+      ]
+    }
+  ];
+  grid.innerHTML = mealData.map(m => {
+    const rows = m.items.map(i => `<div class="meal-item">
+      <span class="meal-item-name">${i.name}</span>
+      <span class="meal-item-qty">${i.qty}</span>
+    </div>`).join("");
+    return `<div class="meal-card" style="background:${m.bg}80;border-color:${m.bg};">
+      <div class="meal-card-title">
+        <div class="meal-card-icon" style="background:${m.iconBg};">${m.icon}</div>
+        ${m.label}
+      </div>
+      ${rows}
+    </div>`;
+  }).join("");
+}
+
+function renderPortionGuide() {
+  const grid = document.getElementById("portion-grid");
+  if (!grid || grid.childElementCount > 0) return; // only render once
+  const groups = Object.keys(NDAP_EXCHANGE_TABLE);
+  const colors = {
+    rice:"var(--terra-pale)", fruit:"var(--gold-pale)", vegetable:"var(--green-pale)",
+    meat:"#f5e6d3", milk:"var(--blue-pale)", fat:"#fff8e7"
+  };
+  grid.innerHTML = groups.map(key => {
+    const g = NDAP_EXCHANGE_TABLE[key];
+    const items = g.examples.map(e => `<div class="portion-item">
+      <div class="portion-item-dot"></div>
+      <div class="portion-item-text"><strong>${e}</strong>= 1 exchange (${g.calories} kcal)</div>
+    </div>`).join("");
+    return `<div class="portion-card" id="pc-${key}">
+      <div class="portion-card-header" onclick="togglePortionCard('${key}')">
+        <div class="portion-card-icon" style="background:${colors[key]};">${g.icon}</div>
+        <div class="portion-card-title">${g.label}</div>
+        <div class="portion-card-kcal">${g.calories} kcal</div>
+        <div class="portion-chevron">▼</div>
+      </div>
+      <div class="portion-body">${items}</div>
+    </div>`;
+  }).join("");
+}
+
+function togglePortionCard(key) {
+  const card = document.getElementById("pc-" + key);
+  if (card) card.classList.toggle("pc-open");
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PRINT DIET PLAN
+════════════════════════════════════════════════════════════════ */
+function printDietPlan() {
+  if (!S.results) { toast("⚠️ Run a calculation first.", "err"); return; }
+  const r        = S.results;
+  const goalCal  = getGoalCalories();
+  const ex       = calcNDAPExchanges(goalCal);
+  const goalLabel = { maintenance:"Maintenance", loss:"Weight Loss", gain:"Weight Gain" }[S_dietGoal];
+  const goalAdj   = S_dietGoal === "loss" ? "TDEE − 500 kcal" : S_dietGoal === "gain" ? "TDEE + 500 kcal" : "= TDEE";
+
+  const sheet = document.getElementById("print-sheet");
+  sheet.innerHTML = `
+<style>
+  .ps-body { font-family: 'Times New Roman', Georgia, serif; color:#111; line-height:1.55; }
+  .ps-header { border-bottom:3px solid #2d6a4f; padding-bottom:10px; margin-bottom:16px; }
+  .ps-logo { font-size:1.05rem; font-weight:700; color:#2d6a4f; text-transform:uppercase; letter-spacing:1.5px; }
+  .ps-title { font-size:1.6rem; font-weight:700; margin:4px 0; }
+  .ps-date  { font-size:.82rem; color:#666; }
+  .ps-section { margin-bottom:18px; }
+  .ps-section-title { font-size:.82rem; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:#555; border-bottom:1.5px solid #ccc; padding-bottom:4px; margin-bottom:10px; }
+  .ps-info-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:8px; }
+  .ps-info-item { padding:8px 10px; background:#f5f5f5; border-radius:6px; }
+  .ps-info-label { font-size:.7rem; font-weight:700; text-transform:uppercase; color:#666; letter-spacing:.5px; }
+  .ps-info-val   { font-size:1rem; font-weight:700; color:#111; }
+  .ps-exch-table { width:100%; border-collapse:collapse; font-size:.84rem; }
+  .ps-exch-table th { background:#2d6a4f; color:#fff; padding:7px 10px; text-align:left; font-size:.75rem; text-transform:uppercase; letter-spacing:.5px; }
+  .ps-exch-table td { padding:7px 10px; border-bottom:1px solid #ddd; vertical-align:top; }
+  .ps-exch-table tr:nth-child(even) td { background:#f9f9f9; }
+  .ps-meal-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+  .ps-meal-card { border:1px solid #ccc; border-radius:8px; padding:10px 12px; }
+  .ps-meal-title { font-weight:700; font-size:.92rem; margin-bottom:8px; border-bottom:1px solid #eee; padding-bottom:5px; }
+  .ps-meal-row { display:flex; justify-content:space-between; font-size:.8rem; padding:3px 0; border-bottom:1px dashed #eee; }
+  .ps-meal-row:last-child { border:none; }
+  .ps-footer { border-top:2px solid #2d6a4f; padding-top:10px; margin-top:20px; font-size:.74rem; color:#666; text-align:center; line-height:1.7; }
+  .ps-goal-box { display:flex; align-items:center; gap:14px; padding:10px 14px; background:#f0f8f0; border:1.5px solid #2d6a4f; border-radius:8px; margin-bottom:14px; }
+  .ps-goal-val { font-size:1.5rem; font-weight:700; color:#111; }
+  .ps-goal-sub { font-size:.78rem; color:#555; }
+</style>
+<div class="ps-body">
+  <div class="ps-header">
+    <div class="ps-logo">🌿 NutriCalc Pro</div>
+    <div class="ps-title">Diet Prescription Sheet</div>
+    <div class="ps-date">Generated: ${new Date().toLocaleDateString("en-PH", {year:"numeric",month:"long",day:"numeric"})}</div>
+  </div>
+
+  <!-- Patient Info -->
+  <div class="ps-section">
+    <div class="ps-section-title">Patient Information</div>
+    <div class="ps-info-grid">
+      <div class="ps-info-item"><div class="ps-info-label">Name</div><div class="ps-info-val">${esc(r.name)}</div></div>
+      <div class="ps-info-item"><div class="ps-info-label">Age</div><div class="ps-info-val">${r.age} years</div></div>
+      <div class="ps-info-item"><div class="ps-info-label">Sex</div><div class="ps-info-val">${r.sex.charAt(0).toUpperCase()+r.sex.slice(1)}</div></div>
+      <div class="ps-info-item"><div class="ps-info-label">Activity</div><div class="ps-info-val" style="font-size:.82rem;">${(r.actLabel||"").split("—")[0].trim()}</div></div>
+      <div class="ps-info-item"><div class="ps-info-label">Height</div><div class="ps-info-val">${esc(r.heightDisplay)}</div></div>
+      <div class="ps-info-item"><div class="ps-info-label">Weight</div><div class="ps-info-val">${parseFloat(r.weight).toFixed(1)} kg</div></div>
+      <div class="ps-info-item"><div class="ps-info-label">DBW</div><div class="ps-info-val">${r.dbwKg} kg</div></div>
+      <div class="ps-info-item"><div class="ps-info-label">AdjBW</div><div class="ps-info-val">${r.adjBw} kg</div></div>
+    </div>
+  </div>
+
+  <!-- Nutrition Results -->
+  <div class="ps-section">
+    <div class="ps-section-title">Nutrition Results</div>
+    <div class="ps-info-grid">
+      <div class="ps-info-item"><div class="ps-info-label">BMI</div><div class="ps-info-val">${r.bmi} <span style="font-size:.75rem;font-weight:400;">(${r.bmiCat})</span></div></div>
+      <div class="ps-info-item"><div class="ps-info-label">BMR</div><div class="ps-info-val">${r.bmr} kcal</div></div>
+      <div class="ps-info-item"><div class="ps-info-label">TDEE</div><div class="ps-info-val">${r.tdee} kcal</div></div>
+      <div class="ps-info-item"><div class="ps-info-label">Weight to Lose</div><div class="ps-info-val">${r.weightToLose !== "N/A" ? r.weightToLose+" kg" : "N/A"}</div></div>
+    </div>
+    <div class="ps-goal-box">
+      <div style="font-size:1.5rem;">${S_dietGoal==="maintenance"?"⚖️":S_dietGoal==="loss"?"🔻":"🔺"}</div>
+      <div>
+        <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#555;">Daily Calorie Goal — ${goalLabel}</div>
+        <div class="ps-goal-val">${goalCal.toLocaleString()} kcal / day</div>
+        <div class="ps-goal-sub">${goalAdj}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Daily Exchanges Table -->
+  <div class="ps-section">
+    <div class="ps-section-title">Daily Food Exchanges (NDAP System)</div>
+    <table class="ps-exch-table">
+      <thead><tr><th>Food Group</th><th>Exchanges / Day</th><th>Kcal/Exchange</th><th>Total kcal</th><th>Example Portions</th></tr></thead>
+      <tbody>
+        ${Object.keys(NDAP_EXCHANGE_TABLE).map(key => {
+          const g = NDAP_EXCHANGE_TABLE[key];
+          const count = ex[key];
+          return `<tr>
+            <td><strong>${g.icon} ${g.label}</strong></td>
+            <td style="text-align:center;font-weight:700;font-size:1rem;">${count}</td>
+            <td style="text-align:center;">${g.calories}</td>
+            <td style="text-align:center;">${count * g.calories}</td>
+            <td style="font-size:.76rem;">${g.examples.slice(0,3).join(", ")}</td>
+          </tr>`;
+        }).join("")}
+        <tr style="background:#f0f8f0;">
+          <td colspan="3" style="font-weight:700;">Total</td>
+          <td style="font-weight:700;text-align:center;">${
+            Object.keys(NDAP_EXCHANGE_TABLE).reduce((sum,k) => sum + ex[k]*NDAP_EXCHANGE_TABLE[k].calories, 0)
+          } kcal</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Meal Plan -->
+  <div class="ps-section">
+    <div class="ps-section-title">Daily Meal Plan</div>
+    <div class="ps-meal-grid">
+      <div class="ps-meal-card">
+        <div class="ps-meal-title">☀️ Breakfast</div>
+        <div class="ps-meal-row"><span>🍚 Rice/Starch</span><span>${Math.round(ex.rice*0.20)} exchanges</span></div>
+        <div class="ps-meal-row"><span>🥩 Meat/Protein</span><span>${Math.round(ex.meat*0.15)} exchanges</span></div>
+        <div class="ps-meal-row"><span>🍌 Fruit</span><span>1 exchange</span></div>
+        <div class="ps-meal-row"><span>🥛 Milk</span><span>1 exchange</span></div>
+      </div>
+      <div class="ps-meal-card">
+        <div class="ps-meal-title">🌤️ Lunch</div>
+        <div class="ps-meal-row"><span>🍚 Rice/Starch</span><span>${Math.round(ex.rice*0.40)} exchanges</span></div>
+        <div class="ps-meal-row"><span>🥩 Meat/Protein</span><span>${Math.round(ex.meat*0.40)} exchanges</span></div>
+        <div class="ps-meal-row"><span>🥦 Vegetables</span><span>${Math.round(ex.vegetable*0.50)} exchanges</span></div>
+        <div class="ps-meal-row"><span>🫒 Fat</span><span>${Math.round(ex.fat*0.40)} exchanges</span></div>
+      </div>
+      <div class="ps-meal-card">
+        <div class="ps-meal-title">🌆 Dinner</div>
+        <div class="ps-meal-row"><span>🍚 Rice/Starch</span><span>${Math.round(ex.rice*0.40)} exchanges</span></div>
+        <div class="ps-meal-row"><span>🥩 Meat/Protein</span><span>${Math.round(ex.meat*0.40)} exchanges</span></div>
+        <div class="ps-meal-row"><span>🥦 Vegetables</span><span>${Math.round(ex.vegetable*0.50)} exchanges</span></div>
+        <div class="ps-meal-row"><span>🫒 Fat</span><span>${Math.round(ex.fat*0.40)} exchanges</span></div>
+      </div>
+      <div class="ps-meal-card">
+        <div class="ps-meal-title">🍎 Snack</div>
+        <div class="ps-meal-row"><span>🍌 Fruit</span><span>${Math.max(1,ex.fruit-1)} exchange(s)</span></div>
+        <div class="ps-meal-row"><span>🫒 Fat</span><span>${Math.round(ex.fat*0.20)} exchanges</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Portion Guide Summary -->
+  <div class="ps-section">
+    <div class="ps-section-title">Portion Guide Summary (1 Exchange Each)</div>
+    <table class="ps-exch-table">
+      <thead><tr><th>Food Group</th><th>kcal</th><th>Examples of 1 Exchange</th></tr></thead>
+      <tbody>
+        ${Object.keys(NDAP_EXCHANGE_TABLE).map(key => {
+          const g = NDAP_EXCHANGE_TABLE[key];
+          return `<tr><td>${g.icon} <strong>${g.label}</strong></td><td style="text-align:center;">${g.calories}</td><td style="font-size:.76rem;">${g.examples.join(" · ")}</td></tr>`;
+        }).join("")}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ps-footer">
+    Based on NDAP Exchange System — Philippines · National Nutrition Council Standard<br/>
+    NutriCalc Pro · For educational and clinical reference purposes only. Always consult a registered nutritionist-dietitian.<br/>
+    This prescription was generated on ${new Date().toLocaleDateString("en-PH", {weekday:"long",year:"numeric",month:"long",day:"numeric"})}
+  </div>
+</div>`;
+
+  window.print();
 }
 
 /* ═══════════════════════════════════════════════════════════════
