@@ -88,7 +88,7 @@
 
 /* ═══ RESET & BASE ═══════════════════════════════════════════ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 15px; }
+html { scroll-behavior: smooth; font-size: 16px; }
 body {
   background: var(--bg);
   color: var(--text);
@@ -126,7 +126,7 @@ body::before {
 #app {
   position: relative; z-index: 1;
   max-width: 920px; margin: 0 auto;
-  padding: 0 16px 80px;
+  padding: 0 16px 48px;
 }
 
 /* ═══ HEADER ════════════════════════════════════════════════ */
@@ -139,7 +139,7 @@ header {
 .brand-tag {
   display: inline-flex; align-items: center; gap: 7px;
   background: var(--green-pale); border: 1px solid var(--green-light);
-  border-radius: 100px; padding: 4px 0px;
+  border-radius: 100px; padding: 4px 12px;
   font-size: .75rem; font-weight: 700; color: var(--green);
   text-transform: uppercase; letter-spacing: 1px;
   margin-bottom: 0px;
@@ -159,7 +159,7 @@ header p { color: var(--muted); font-size: .92rem; margin-top: 8px; max-width: 4
   padding-top: 0px;
 }
 .icon-btn {
-  width: 42px; height: 42px; border-radius: var(--radius-sm);
+  width: 44px; height: 44px; border-radius: var(--radius-sm);
   background: var(--surface); border: 1.5px solid var(--border);
   color: var(--text2); font-size: 17px;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
@@ -249,7 +249,7 @@ header p { color: var(--muted); font-size: .92rem; margin-top: 8px; max-width: 4
   border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
   color: var(--text);
-  font-family: var(--font-body); font-size: .98rem;
+  font-family: var(--font-body); font-size: 1rem;
   padding: 11px 14px;
   transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
   outline: none; width: 100%;
@@ -335,11 +335,11 @@ header p { color: var(--muted); font-size: .92rem; margin-top: 8px; max-width: 4
 #results-wrap {
   opacity: 0; transform: translateY(24px);
   pointer-events: none; transition: opacity .4s, transform .4s;
-  height: 0; overflow: hidden;
+  visibility: hidden;
 }
 #results-wrap.revealed {
   opacity: 1; transform: translateY(0);
-  pointer-events: all; height: auto; overflow: visible;
+  pointer-events: all; visibility: visible;
 }
 
 /* Section divider heading */
@@ -409,8 +409,8 @@ header p { color: var(--muted); font-size: .92rem; margin-top: 8px; max-width: 4
 .bmi-badge.nw  { background: var(--green-pale); color: var(--green); }
 .bmi-badge.ow  { background: var(--gold-pale);  color: var(--gold); }
 .bmi-badge.ob  { background: var(--terra-pale); color: var(--terra); }
-.bmi-badge.ob2 { background: #fdd0c8; color: #b83010; }
-.bmi-badge.ob3 { background: #f9b8ac; color: #8b1a06; }
+.bmi-badge.ob2 { background: var(--terra-pale); color: var(--terra); border: 1px solid var(--terra-mid); }
+.bmi-badge.ob3 { background: var(--terra-pale); color: var(--terra); border: 2px solid var(--terra); font-weight: 800; }
 
 /* BMI visual bar */
 .bmi-bar-wrap { margin-top: 10px; }
@@ -581,7 +581,9 @@ table.hist-table {
   font-size: .88rem; font-weight: 600;
   box-shadow: var(--shadow-lg);
   transition: transform .32s cubic-bezier(.4,0,.2,1), opacity .32s;
-  opacity: 0; z-index: 9999; white-space: nowrap;
+  opacity: 0; z-index: 9999;
+  max-width: calc(100vw - 40px);
+  white-space: normal; text-align: center;
   display: flex; align-items: center; gap: 8px;
 }
 #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
@@ -638,9 +640,9 @@ table.hist-table {
 .exch-rice::before   { background: var(--terra); }
 .exch-fruit::before  { background: var(--gold); }
 .exch-veg::before    { background: var(--green-mid); }
-.exch-meat::before   { background: #8b4513; }
+.exch-meat::before   { background: var(--terra-mid); }
 .exch-milk::before   { background: var(--navy); }
-.exch-fat::before    { background: #c9882c; }
+.exch-fat::before    { background: var(--gold); }
 
 .exch-icon { font-size: 1.6rem; margin-bottom: 8px; display: block; }
 .exch-name { font-size: .72rem; font-weight: 700; color: var(--muted);
@@ -831,6 +833,14 @@ footer a { color: var(--green); text-decoration: none; }
   .height-dual { flex-direction: column; }
   .action-row { flex-direction: column; }
   .action-row .btn { width: 100%; justify-content: center; }
+  .seg-ctrl button { padding: 7px 12px; }
+  .unit-bar { gap: 8px; }
+}
+@media (max-width: 360px) {
+  .calorie-grid { grid-template-columns: 1fr; }
+  .metrics-grid { grid-template-columns: 1fr; }
+  .bmi-tile { grid-column: span 1 !important; }
+  .goal-btns { grid-template-columns: 1fr; }
 }
 @media (min-width: 581px) and (max-width: 780px) {
   .calorie-grid { grid-template-columns: 1fr 1fr; }
@@ -893,7 +903,7 @@ footer a { color: var(--green); text-decoration: none; }
 }
 [data-theme="dark"] .hp-title-icon { background: var(--green-pale); }
 .hp-close {
-  width: 36px; height: 36px; border-radius: var(--radius-xs);
+  width: 44px; height: 44px; border-radius: var(--radius-xs);
   background: var(--surface2); border: 1.5px solid var(--border);
   color: var(--muted); font-size: 16px; font-weight: 700;
   cursor: pointer; display: flex; align-items: center;
@@ -915,6 +925,7 @@ footer a { color: var(--green); text-decoration: none; }
   border-radius: var(--radius-sm); color: var(--text);
   font-family: var(--font-body); font-size: .9rem;
   outline: none; transition: border-color var(--transition), box-shadow var(--transition);
+  -webkit-appearance: none; appearance: none;
 }
 #help-search:focus {
   border-color: var(--green-mid);
@@ -1135,6 +1146,7 @@ footer a { color: var(--green); text-decoration: none; }
   font-family: var(--font-body); font-size: .88rem; font-weight: 700;
   cursor: pointer; transition: all var(--transition);
   display: flex; align-items: center; gap: 7px;
+  min-height: 44px;
 }
 .hp-close-btn:hover { background: var(--green-mid); }
 
@@ -1158,7 +1170,7 @@ footer a { color: var(--green); text-decoration: none; }
   background: var(--text); color: var(--bg);
   font-family: var(--font-body); font-size: .75rem; font-weight: 500;
   padding: 6px 10px; border-radius: var(--radius-xs);
-  white-space: nowrap; max-width: 220px; white-space: normal;
+  white-space: normal; max-width: min(220px, 80vw);
   line-height: 1.45; text-align: center;
   pointer-events: none; opacity: 0;
   transition: opacity .18s; z-index: 500;
@@ -1210,13 +1222,12 @@ footer a { color: var(--green); text-decoration: none; }
   position: relative;
 }
 .dots-btn {
-  width: 32px; height: 22px; border-radius: var(--radius-sm);
+  width: 44px; height: 44px; border-radius: var(--radius-sm);
   background: var(--surface); border: 1.5px solid var(--border);
   color: var(--text2); font-size: 20px; font-weight: 900;
   cursor: pointer; display: flex; align-items: center;
   justify-content: center; transition: all var(--transition);
   flex-shrink: 0; letter-spacing: .5px; line-height: 1;
-  padding-bottom: 4px;
 }
 .dots-btn:hover,
 .dots-btn.open { border-color: var(--green); color: var(--green); background: var(--green-pale); }
@@ -1300,7 +1311,7 @@ footer a { color: var(--green); text-decoration: none; }
 <body>
 <div class="bg-orbs"></div>
 
-<div id="app">
+<main id="app">
 
   <!-- ══════════════════════════════════════════
        HEADER
@@ -1363,7 +1374,7 @@ footer a { color: var(--green); text-decoration: none; }
 
       <!-- Name -->
       <div class="fg">
-        <label>
+        <label for="i-name">
           <span class="tt-wrap">Full Name
             <span class="tt-icon" data-tip="Your name is saved with your results for easy tracking.">i</span>
           </span>
@@ -1373,7 +1384,7 @@ footer a { color: var(--green); text-decoration: none; }
 
       <!-- Age -->
       <div class="fg">
-        <label>
+        <label for="i-age">
           <span class="tt-wrap">Age (years)
             <span class="tt-icon" data-tip="Age affects your BMR — metabolism slows slightly each year.">i</span>
           </span>
@@ -1386,12 +1397,12 @@ footer a { color: var(--green); text-decoration: none; }
 
       <!-- Sex -->
       <div class="fg">
-        <label>
+        <label id="sex-label">
           <span class="tt-wrap">Biological Sex
             <span class="tt-icon" data-tip="Used in the Mifflin–St Jeor formula. Males add +5, females subtract 161 from the base BMR.">i</span>
           </span>
         </label>
-        <div class="sex-row">
+        <div class="sex-row" role="group" aria-labelledby="sex-label">
           <button class="sex-btn active-m" id="sex-m" onclick="setSex('male')"   aria-pressed="true">♂ Male</button>
           <button class="sex-btn"           id="sex-f" onclick="setSex('female')" aria-pressed="false">♀ Female</button>
         </div>
@@ -1399,7 +1410,7 @@ footer a { color: var(--green); text-decoration: none; }
 
       <!-- Height (cm) -->
       <div class="fg" id="h-cm-group">
-        <label>
+        <label for="i-height-cm">
           <span class="tt-wrap">Height
             <span class="tt-icon" data-tip="Used in BMR, BMI, and DBW formulas. Switch to ft/in using the toggle above.">i</span>
           </span>
@@ -1412,7 +1423,7 @@ footer a { color: var(--green); text-decoration: none; }
 
       <!-- Height (ft + in) — hidden by default -->
       <div class="fg" id="h-ft-group" style="display:none;">
-        <label>
+        <label for="i-height-ft">
           <span class="tt-wrap">Height
             <span class="tt-icon" data-tip="Enter feet and inches separately. DBW uses total inches above 5ft.">i</span>
           </span>
@@ -1431,7 +1442,7 @@ footer a { color: var(--green); text-decoration: none; }
 
       <!-- Weight -->
       <div class="fg">
-        <label>
+        <label for="i-weight">
           <span class="tt-wrap">Weight
             <span class="tt-icon" data-tip="Your actual body weight. Used in BMR, BMI, AdjBW, and macro calculations.">i</span>
           </span>
@@ -1445,7 +1456,7 @@ footer a { color: var(--green); text-decoration: none; }
 
       <!-- Activity Level -->
       <div class="fg span-full">
-        <label>
+        <label for="i-activity">
           <span class="tt-wrap">Activity Level
             <span class="tt-icon" data-tip="Your activity multiplier is applied to BMR to calculate TDEE — how many calories you actually burn daily.">i</span>
           </span>
@@ -1465,7 +1476,7 @@ footer a { color: var(--green); text-decoration: none; }
     <div class="goal-selector-wrap">
       <div class="goal-selector-label">
         <span class="tt-wrap">Diet Goal
-          <span class="tt-icon" data-tip="Your goal adjusts calorie prescription: Maintenance = TDEE, Weight Loss = TDEE−500, Weight Gain = TDEE+500.">i</span>
+          <span class="tt-icon" data-tip="Your goal adjusts calorie prescription: Maintenance = TDEE, Weight Loss = TDEE−500, Weight Gain = TDEE+300.">i</span>
         </span>
       </div>
       <div class="goal-btns">
@@ -1482,7 +1493,7 @@ footer a { color: var(--green); text-decoration: none; }
         <button class="goal-btn" id="goal-gain" onclick="setDietGoal('gain')">
           <span class="gb-icon">🔺</span>
           <span class="gb-label">Weight Gain</span>
-          <span class="gb-sub">TDEE + 500 kcal</span>
+          <span class="gb-sub">TDEE + 300 kcal</span>
         </button>
       </div>
     </div>
@@ -1518,7 +1529,7 @@ footer a { color: var(--green); text-decoration: none; }
     <div class="section-label">📊 Body Metrics</div>
     <div class="metrics-grid">
       <!-- BMI -->
-      <div class="metric-tile" style="grid-column: span 2;">
+      <div class="metric-tile bmi-tile" style="grid-column: span 2;">
         <div class="mt-icon">📏</div>
         <div class="mt-label">Body Mass Index (BMI)</div>
         <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
@@ -1675,7 +1686,7 @@ footer a { color: var(--green); text-decoration: none; }
 
     <!-- BMR Steps -->
     <div class="accordion">
-      <button class="acc-header" onclick="toggleAcc(this)">
+      <button class="acc-header" onclick="toggleAcc(this)" aria-expanded="false">
         <span class="ah-left">
           <span>📐 BMR &amp; TDEE Calculation</span>
           <span class="ah-pill">Mifflin–St Jeor</span>
@@ -1689,7 +1700,7 @@ footer a { color: var(--green); text-decoration: none; }
 
     <!-- BMI Steps -->
     <div class="accordion">
-      <button class="acc-header" onclick="toggleAcc(this)">
+      <button class="acc-header" onclick="toggleAcc(this)" aria-expanded="false">
         <span class="ah-left">
           <span>📊 BMI Calculation</span>
           <span class="ah-pill">WHO Formula</span>
@@ -1703,7 +1714,7 @@ footer a { color: var(--green); text-decoration: none; }
 
     <!-- DBW / AdjBW Steps -->
     <div class="accordion">
-      <button class="acc-header" onclick="toggleAcc(this)">
+      <button class="acc-header" onclick="toggleAcc(this)" aria-expanded="false">
         <span class="ah-left">
           <span>⚖️ DBW &amp; AdjBW Calculation</span>
           <span class="ah-pill">NDAP Formula</span>
@@ -1717,10 +1728,10 @@ footer a { color: var(--green); text-decoration: none; }
 
     <!-- Macro Steps -->
     <div class="accordion">
-      <button class="acc-header" onclick="toggleAcc(this)">
+      <button class="acc-header" onclick="toggleAcc(this)" aria-expanded="false">
         <span class="ah-left">
           <span>🥗 Macronutrient Calculation</span>
-          <span class="ah-pill">Clinical Reference</span>
+          <span class="ah-pill">Maintenance Basis</span>
         </span>
         <span class="acc-chevron">▼</span>
       </button>
@@ -1867,7 +1878,7 @@ footer a { color: var(--green); text-decoration: none; }
     </div>
   </footer>
 
-</div><!-- /#app -->
+</main><!-- /#app -->
 
 <!-- ══════════════════════════════════════════════════════════
      HELP BACKDROP
@@ -2203,12 +2214,12 @@ footer a { color: var(--green); text-decoration: none; }
                 <div style="font-weight:700;color:var(--terra);">Obese Class I 30–34.9</div>
                 <div style="color:var(--muted);">Increased health risk. Medical guidance advised.</div>
               </div>
-              <div style="padding:7px 10px;background:#fdd0c8;border-radius:var(--radius-xs);font-size:.79rem;">
-                <div style="font-weight:700;color:#b83010;">Obese Class II 35–39.9</div>
+              <div style="padding:7px 10px;background:var(--terra-pale);border-radius:var(--radius-xs);font-size:.79rem;border:1px solid var(--terra-mid);">
+                <div style="font-weight:700;color:var(--terra);">Obese Class II 35–39.9</div>
                 <div style="color:var(--muted);">High health risk. Consult a healthcare professional.</div>
               </div>
-              <div style="padding:7px 10px;background:#f9b8ac;border-radius:var(--radius-xs);font-size:.79rem;">
-                <div style="font-weight:700;color:#8b1a06;">Obese Class III ≥40</div>
+              <div style="padding:7px 10px;background:var(--terra-pale);border-radius:var(--radius-xs);font-size:.79rem;border:2px solid var(--terra);">
+                <div style="font-weight:700;color:var(--terra);">Obese Class III ≥40</div>
                 <div style="color:var(--muted);">Very high risk. Prompt medical evaluation strongly recommended.</div>
               </div>
             </div>
@@ -2395,8 +2406,8 @@ footer a { color: var(--green); text-decoration: none; }
             <div class="h-def-formula">½ cup carrots = 1 cup cabbage = ½ cup green beans → 1 Exchange</div>
           </div>
 
-          <div class="h-def" style="border-left-color:#8b4513;margin-bottom:8px;">
-            <div class="h-def-term" style="color:#8b4513;"><span class="h-def-icon">🥩</span> Meat / Protein — 55 kcal per exchange</div>
+          <div class="h-def" style="border-left-color:var(--terra-mid);margin-bottom:8px;">
+            <div class="h-def-term" style="color:var(--terra-mid);"><span class="h-def-icon">🥩</span> Meat / Protein — 55 kcal per exchange</div>
             <div class="h-def-desc">Lean protein sources. Each exchange provides approximately 7g of protein.</div>
             <div class="h-def-formula">30g chicken = 30g fish = 1 egg = ½ cup tofu → 1 Exchange</div>
           </div>
@@ -2821,7 +2832,7 @@ function calculateAll() {
   ══════════════════════════════════════════ */
   const bmrBase = (10 * weightKg) + (6.25 * hCm) - (5 * age);
   const bmrAdj  = sex === "male" ? 5 : -161;
-  const bmr     = computeBMR(weightKg, hCm, age, sex);
+  const bmr     = bmrBase + bmrAdj;
 
   /* ══════════════════════════════════════════
      2. TDEE
@@ -3210,6 +3221,7 @@ function toggleAcc(btn) {
   const body = btn.nextElementSibling;
   const open = btn.classList.toggle("open");
   body.classList.toggle("open", open);
+  btn.setAttribute("aria-expanded", open ? "true" : "false");
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -3296,7 +3308,7 @@ function exportSVG() {
   <rect x="0" y="0" width="520" height="64" fill="#2d6a4f" rx="17"/>
   <rect x="0" y="48" width="520" height="16" fill="#2d6a4f"/>
   <text x="30" y="26" fill="#d8f3dc" font-size="11" font-family="Georgia" font-weight="700" letter-spacing="2">NUTRICALC PRO</text>
-  <text x="30" y="48" fill="white" font-size="18" font-family="Georgia" font-weight="700">${displayName}  ·  ${r.sex.charAt(0).toUpperCase()+r.sex.slice(1)}, ${r.age}yrs  ·  ${r.heightDisplay}  ·  ${r.weight.toFixed(1)}kg</text>
+  <text x="30" y="48" fill="white" font-size="18" font-family="Georgia" font-weight="700">${displayName}  ·  ${r.sex.charAt(0).toUpperCase()+r.sex.slice(1)}, ${r.age}yrs  ·  ${r.heightDisplay}  ·  ${parseFloat(r.weight).toFixed(1)}kg</text>
   <!-- Calories -->
   <text x="30" y="100" fill="#7a7260" font-size="10" font-family="Georgia" font-weight="700" letter-spacing="1.5">CALORIE NEEDS</text>
   <rect x="30" y="108" width="110" height="64" fill="#d8f3dc" rx="10"/>
@@ -3413,13 +3425,13 @@ function renderHistory() {
     el.innerHTML = '<p class="no-hist">No history yet.</p>'; return;
   }
   const rows = S.history.map(h => `<tr>
-    <td>${h.ts}</td><td>${h.name}</td>
-    <td>${h.tdee}</td><td>${h.bmi} (${h.bmiCat})</td>
-    <td>${h.dbwKg}</td><td>${h.adjBw}</td>
-    <td>${h.protG}g / ${h.fatG}g / ${h.carbG}g</td>
+    <td>${esc(h.ts)}</td><td>${esc(h.name)}</td>
+    <td>${esc(String(h.tdee))}</td><td>${esc(String(h.bmi))} (${esc(h.bmiCat)})</td>
+    <td>${esc(String(h.dbwKg))}</td><td>${esc(String(h.adjBw))}</td>
+    <td>${esc(String(h.protG))}g / ${esc(String(h.fatG))}g / ${esc(String(h.carbG))}g</td>
   </tr>`).join("");
   el.innerHTML = `<div class="hist-wrap"><table class="hist-table">
-    <thead><tr><th>Time</th><th>Name</th><th>TDEE</th><th>BMI</th><th>DBW</th><th>AdjBW</th><th>P/F/C</th></tr></thead>
+    <thead><tr><th>Time</th><th>Name</th><th>TDEE</th><th>BMI</th><th>DBW</th><th>AdjBW</th><th>P/F/C (maint.)</th></tr></thead>
     <tbody>${rows}</tbody>
   </table></div>`;
 }
@@ -3489,7 +3501,7 @@ function loadStorage() {
 function toast(msg, type = "inf") {
   const el = document.getElementById("toast");
   el.textContent = msg;
-  el.className = "toast " + type + " show";
+  el.className = type + " show";
   clearTimeout(el._t);
   el._t = setTimeout(() => el.classList.remove("show"), 3400);
 }
@@ -3551,7 +3563,7 @@ function renderGoalBanner(goalCal) {
   pill.textContent   = c.pillTxt;
   pill.style.color   = c.pillColor;
   pill.style.borderColor = c.brd;
-  const adj = S_dietGoal === "loss" ? "−500 kcal from TDEE" : S_dietGoal === "gain" ? "+500 kcal from TDEE" : "= TDEE";
+  const adj = S_dietGoal === "loss" ? "−500 kcal from TDEE" : S_dietGoal === "gain" ? "+300 kcal from TDEE" : "= TDEE";
   banner.querySelector(".gcb-sub").textContent = "kcal / day · " + adj;
 }
 
@@ -3684,7 +3696,7 @@ function printDietPlan() {
   const goalCal  = getGoalCalories();
   const ex       = calcNDAPExchanges(goalCal);
   const goalLabel = { maintenance:"Maintenance", loss:"Weight Loss", gain:"Weight Gain" }[S_dietGoal];
-  const goalAdj   = S_dietGoal === "loss" ? "TDEE − 500 kcal" : S_dietGoal === "gain" ? "TDEE + 500 kcal" : "= TDEE";
+  const goalAdj   = S_dietGoal === "loss" ? "TDEE − 500 kcal" : S_dietGoal === "gain" ? "TDEE + 300 kcal" : "= TDEE";
 
   const sheet = document.getElementById("print-sheet");
   sheet.innerHTML = `
@@ -3864,11 +3876,31 @@ function openHelp() {
   if (dot) { dot.style.display = "none"; localStorage.setItem("nc-help-seen","1"); }
   // Focus search bar
   setTimeout(() => document.getElementById("help-search").focus(), 350);
+  // Activate focus trap
+  document.getElementById("help-panel").addEventListener("keydown", trapFocus);
 }
 function closeHelp() {
   document.getElementById("help-backdrop").classList.remove("open");
   document.getElementById("help-panel").classList.remove("open");
   document.body.style.overflow = "";
+  document.getElementById("help-panel").removeEventListener("keydown", trapFocus);
+  // Restore focus to the button that opened the panel
+  const opener = document.getElementById("dotsBtn");
+  if (opener) opener.focus();
+}
+function trapFocus(e) {
+  if (e.key !== "Tab") return;
+  const panel = document.getElementById("help-panel");
+  const focusable = panel.querySelectorAll(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  );
+  const first = focusable[0];
+  const last  = focusable[focusable.length - 1];
+  if (e.shiftKey) {
+    if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+  } else {
+    if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -3892,9 +3924,13 @@ function jumpToSection(id) {
   const sec = document.getElementById(id);
   if (!sec) return;
   sec.classList.add("ha-open");
-  // Scroll to it inside the panel body
+  // Scroll to it inside the panel body (not the window)
   setTimeout(() => {
-    sec.scrollIntoView({ behavior: "smooth", block: "start" });
+    const body = document.querySelector(".hp-body");
+    if (body) {
+      const secTop = sec.offsetTop - body.offsetTop;
+      body.scrollTo({ top: secTop - 16, behavior: "smooth" });
+    }
   }, 60);
 }
 
